@@ -17,7 +17,7 @@ public class AttackingState : EnemyStateBase
         {
             return;
         }
-        Debug.Log("Entering Attacking state");
+        //Debug.Log("Entering Attacking state");
         if (ai.IsAlive())
         {
 
@@ -59,7 +59,7 @@ public class AttackingState : EnemyStateBase
 
         if (ai.AttackCooldownTimer >= ai.AttackCooldown)
         {
-            Debug.Log("inside attack cooldown");
+            //Debug.Log("inside attack cooldown");
             ai.AttackCooldownTimer -= ai.AttackCooldown;
             SpawnAttackPrefab(ai);
             ai.GetComponent<EnemyAnimator>().TriggerAttack();
@@ -74,7 +74,7 @@ public class AttackingState : EnemyStateBase
 
     void SpawnAttackPrefab(EnemyAI ai)
     {
-        Debug.Log("Spawning attack Prefab");
+        //Debug.Log("Spawning attack Prefab");
         //Debug.Log("Attack Prefab spawned");
         Vector3 attackDirection = (ai.Target.transform.position - ai.Agent.transform.position);
         Vector3 spawnPosition = (attackDirection.normalized * ai.AttackRange) + ai.Agent.transform.position;

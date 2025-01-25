@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WanderingState : EnemyStateBase
 {
-    float maxWanderDistance;
-    Vector3 startPosition;
+    protected float maxWanderDistance;
+    protected Vector3 startPosition;
+    protected NavMeshAgent agent;
 
     public WanderingState(float maxWanderDistance, Vector3 startPosition)
     {
@@ -13,9 +15,30 @@ public class WanderingState : EnemyStateBase
 
     public override void Enter(EnemyAI ai)
     {
-        //Debug.Log("Enter Wandering");
         base.Enter(ai);
+        
+        agent = ai.GetComponent<NavMeshAgent>();
+        
+        // Set walking animation
+        BasicAnimator animator = ai.GetComponent<BasicAnimator>();
+        if (animator != null)
+        {
+            animator.SetRunning(false);
+            animator.SetWalking(true);
+        }
+
         GetNewWanderDestination(ai);
+    }
+
+    public override void Exit(EnemyAI ai)
+    {
+        BasicAnimator animator = ai.GetComponent<BasicAnimator>();
+        if (animator != null)
+        {
+            animator.SetWalking(false);
+        }
+        
+        base.Exit(ai);
     }
 
     void GetNewWanderDestination(EnemyAI ai)

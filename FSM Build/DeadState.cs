@@ -4,7 +4,7 @@ public class DeadState : EnemyStateBase
 {
     public DeadState()
     {
-        Debug.Log("I'm in a dead state!");
+        // Debug.Log("I'm in a dead state!");
     }
     public override void Enter(EnemyAI ai)
     {

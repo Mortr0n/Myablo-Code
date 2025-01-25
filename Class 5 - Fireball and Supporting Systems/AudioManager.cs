@@ -106,7 +106,7 @@ public class AudioManager : MonoBehaviour
     public void PlayGameMusic()
     {
         //PlayMusic(gameMusic);
-        Debug.Log($"GameMusic ${gameMusicList} {gameMusic.length}");
+        //Debug.Log($"GameMusic ${gameMusicList} {gameMusic.length}");
             PlayPlaylist(gameMusicList);
     }
 

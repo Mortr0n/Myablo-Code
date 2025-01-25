@@ -10,7 +10,10 @@ public class BasicAnimator : MonoBehaviour
     {
         thisAnimator.SetBool("Walking", val);
     }
-
+public virtual void SetRunning(bool val)
+    {
+        thisAnimator.SetBool("Running", val);
+    }
 
     public virtual void TriggerAttack()
     {

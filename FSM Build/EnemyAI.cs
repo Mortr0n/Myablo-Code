@@ -5,11 +5,11 @@ public class EnemyAI : BasicAI
     private EnemyStateBase currentState;
 
     // Pursuing State Vars
-    GameObject target;
+    protected GameObject target;
     [SerializeField] protected float maxWanderDistance = 6;
     [SerializeField] protected float maxPursuitDistance = 15f;
     [SerializeField] protected float attackRange = 1.75f;
-    Vector3 startPosition = Vector3.zero;
+    protected Vector3 startPosition = Vector3.zero;
 
     // Attacking State Vars
     [SerializeField] protected float damage = 3;
@@ -37,13 +37,12 @@ public class EnemyAI : BasicAI
     public float AttackCooldownTimer { get { return attackCooldownTimer; } set { attackCooldownTimer = value; } }
     public GameObject AttackPrefab { get { return attackPrefab; } }
     public float ExperienceValue { get { return experienceValue; } }
-    protected void Start()
+    protected virtual void Start()
     {
         //Debug.Log("Start FSMAI");
         startPosition = transform.position;
         ChangeState(new WanderingState(maxWanderDistance, startPosition));
     }
-
 
     protected override void RunAI()
     {
@@ -53,7 +52,7 @@ public class EnemyAI : BasicAI
         }
     }
 
-    public void ChangeState(EnemyStateBase newState)
+    public virtual void ChangeState(EnemyStateBase newState)
     {
         if (currentState != null && newState != null)
         {
@@ -63,7 +62,7 @@ public class EnemyAI : BasicAI
         currentState.Enter(this);
     }
 
-    public void TriggerWandering()
+    public virtual void TriggerWandering()
     {
         if (!aiAlive)
         {
@@ -75,7 +74,7 @@ public class EnemyAI : BasicAI
         }
     }
 
-    public void TriggerPursuing(GameObject targetToPursue)
+    public virtual void TriggerPursuing(GameObject targetToPursue)
     {
         if (!aiAlive)
         {
@@ -85,10 +84,8 @@ public class EnemyAI : BasicAI
         if (aiAlive)
         {
             this.target = targetToPursue;
-
             ChangeState(new PursuingState(targetToPursue));
         }
-
     }
 
     public bool TargetIsOutofPursuitRange(GameObject targetToPursue)
@@ -101,7 +98,7 @@ public class EnemyAI : BasicAI
         return Vector3.Distance(transform.position, targetToPursue.transform.position) <= attackRange;
     }
 
-    public void TriggerAttacking(GameObject targetToAttack)
+    public virtual void TriggerAttacking(GameObject targetToAttack)
     {
         if (!aiAlive)
         {
@@ -124,7 +121,7 @@ public class EnemyAI : BasicAI
         aiAlive = false;
     }
 
-    protected void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         //Debug.Log($"other {other.name} {other.gameObject.name} combat Reciever {other.GetComponent<CombatReceiver>()} not istrigger? {!other.isTrigger}");
         if (other.GetComponent<CombatReceiver>() != null && !other.isTrigger)

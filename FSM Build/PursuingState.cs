@@ -1,100 +1,74 @@
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
+using UnityEngine.AI;
 
-public class PursuingState : EnemyStateBase 
+public class PursuingState : EnemyStateBase
 {
-    GameObject targetToPursue;
-    public PursuingState(GameObject targetToPursue)
+    protected GameObject target;
+    protected float runSpeedMultiplier = 2f;
+    protected float originalSpeed;
+    protected NavMeshAgent agent;
+
+    public PursuingState(GameObject target)
     {
-        this.targetToPursue = targetToPursue;
+        this.target = target;
     }
 
     public override void Enter(EnemyAI ai)
     {
-        if (!ai.IsAlive())
+        base.Enter(ai);
+        
+        // Cache and modify NavMeshAgent
+        agent = ai.GetComponent<NavMeshAgent>();
+        if (agent != null)
         {
-            Debug.Log("Enter and !ai.IsAlive");
-            return;
+            originalSpeed = agent.speed;
+            agent.speed *= runSpeedMultiplier;
         }
-        Debug.Log("Entering Pursuing state");
-        if (ai.IsAlive())
-        {
-            Debug.Log("Enter and ai.IsAlive");
-            base.Enter(ai);
-            // fill in pursuit here
-            RunPursuing(ai);
-        }
-       
-    }
 
+        // Set running animation
+        BasicAnimator animator = ai.GetComponent<BasicAnimator>();
+        if (animator != null)
+        {
+            animator.SetWalking(false);
+            animator.SetRunning(true);
+        }
+    }
 
     public override void Update(EnemyAI ai)
     {
-        if (!ai.IsAlive())
+        if (target == null)
         {
-            return;
-        }
-
-        if (ai.TargetIsInAttackRange(targetToPursue))
-        {
-            if (ai.IsAlive())
-            {
-                ai.ChangeState(new AttackingState(targetToPursue));
-            }
-            else if (ai.IsAlive())
-            {
-                RunPursuing(ai);
-            }
-        }
-            
-    }
-
-
-    void RunPursuing(EnemyAI ai) 
-    {
-        Debug.Log("RunPursuing");
-        if (!ai.IsAlive())
-        {
-            Debug.Log("RunPursuing and !ai.IsAlive");
-            return;
-        }
-
-        Debug.Log("Running Pursuing");
-
-        if (targetToPursue == null && ai.IsAlive())
-        {
-            Debug.Log("RunPursuing and ai.IsAlive targetToPursue");
             ai.TriggerWandering();
             return;
         }
-        // go to targets position
-        if (ai.IsAlive())
-        {
-            Debug.Log($"RunPursuing and ai.IsAlive {ai.IsAlive()}");
-            if (ai.Agent.navMeshOwner)
-            {
-                ai.Agent.destination = targetToPursue.transform.position;
-            }
-            
 
-            if (ai.TargetIsInAttackRange(targetToPursue))
-            {
-                ai.TriggerAttacking(targetToPursue);
-            }
-            else if (ai.TargetIsOutofPursuitRange(targetToPursue))
-            {
-                ai.TriggerWandering();
-            }
+        if (agent != null)
+        {
+            agent.SetDestination(target.transform.position);
+        }
+
+        float distanceToTarget = Vector3.Distance(ai.transform.position, target.transform.position);
+        if (distanceToTarget <= ai.AttackRange)
+        {
+            ai.TriggerAttacking(target);
         }
     }
 
-    //private bool TargetIsOutofPursuitRange(SkeletonFSMAI ai)
-    //{
-    //    return Vector3.Distance(ai.transform.position, targetToPursue.transform.position) > ai.MaxPursuitDistance;
-    //}
+    public override void Exit(EnemyAI ai)
+    {
+        if (agent != null)
+        {
+            agent.speed = originalSpeed;
+        }
 
-    //private bool TargetIsInAttackRange(SkeletonFSMAI ai)
-    //{
-    //    return Vector3.Distance(ai.transform.position, targetToPursue.transform.position) <= ai.AttackRange;
-    //}
+        // Reset animation state
+        BasicAnimator animator = ai.GetComponent<BasicAnimator>();
+        if (animator != null)
+        {
+            animator.SetRunning(false);
+        }
+        
+        base.Exit(ai);
+    }
 }
