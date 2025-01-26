@@ -20,6 +20,7 @@ public class PursuingState : EnemyStateBase
         
         // Cache and modify NavMeshAgent
         agent = ai.GetComponent<NavMeshAgent>();
+
         if (agent != null)
         {
             originalSpeed = agent.speed;
@@ -39,6 +40,7 @@ public class PursuingState : EnemyStateBase
     {
         if (target == null)
         {
+            //Debug.LogWarning($"Target is null, returning to wandering state t: {target} ");
             ai.TriggerWandering();
             return;
         }
@@ -49,8 +51,23 @@ public class PursuingState : EnemyStateBase
         }
 
         float distanceToTarget = Vector3.Distance(ai.transform.position, target.transform.position);
+        Debug.Log($"Dist to targ: {distanceToTarget} and {distanceToTarget < ai.AttackRange} and range {ai.AttackRange}");
+        if (agent == null)
+        {
+            agent = ai.GetComponent<NavMeshAgent>();
+            Debug.Log($"agent {agent} isStopped {agent.isStopped}");
+        }
+
         if (distanceToTarget <= ai.AttackRange)
         {
+            if (agent != null)
+            {
+                if (!agent.isStopped)
+                {
+                    agent.isStopped = true;
+                }
+            }
+            //agent.SetDestination(agent.transform.position);
             ai.TriggerAttacking(target);
         }
     }

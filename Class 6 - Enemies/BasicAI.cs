@@ -6,6 +6,7 @@ public class BasicAI : MonoBehaviour
 {
     protected NavMeshAgent agent;
     [SerializeField] protected bool aiAlive = true;
+    //[SerializeField] protected bool isStopped = true;
     protected int factionID = 0;
 
     public NavMeshAgent Agent { get { return agent; } }
@@ -20,7 +21,7 @@ public class BasicAI : MonoBehaviour
     protected virtual void Update()
     {
         if (!aiAlive) return;
-        if(aiAlive) RunAI();
+        RunAI();
     }
 
     public bool IsAlive()
@@ -31,6 +32,19 @@ public class BasicAI : MonoBehaviour
     {
         aiAlive = false;
     }
+    //public void SetAgentMoving()
+    //{
+    //    isStopped = false;
+    //}
+    //public void SetAgentStopped()
+    //{
+    //    isStopped = true;
+    //}
+
+    //public bool ReturnMoveState()
+    //{
+    //    return isStopped;
+    //}
 
     protected virtual void RunAI()
     {   

@@ -4,11 +4,13 @@ using static UnityEngine.GraphicsBuffer;
 
 public class AttackingState : EnemyStateBase
 {
-    GameObject targetToAttack;
+    protected GameObject targetToAttack;
+    protected NavMeshAgent agent;
 
     //
     public AttackingState(GameObject target)
     {
+        
         this.targetToAttack = target;
     }
     public override void Enter(EnemyAI ai)
@@ -16,15 +18,24 @@ public class AttackingState : EnemyStateBase
         if (!ai.IsAlive())
         {
             return;
-        }
-        //Debug.Log("Entering Attacking state");
-        if (ai.IsAlive())
+        } 
+        base.Enter(ai);
+        // start animation?  maybe animation would be in update?
+        if (agent != null)
         {
-
-            base.Enter(ai);
-            // start animation?  maybe animation would be in update?
-            RunAttacking(ai);
+            if (!agent.isStopped)
+            {
+                agent.isStopped = false;
+            }
         }
+        if (agent == null)
+        {
+            agent = ai.GetComponent<NavMeshAgent>();
+            Debug.Log($"agent {agent} isStopped {agent.isStopped}");
+        }
+        
+        RunAttacking(ai);
+
     }
     
     public override void Update(EnemyAI ai)
@@ -36,18 +47,10 @@ public class AttackingState : EnemyStateBase
         }
         if (!ai.TargetIsInAttackRange(targetToAttack))
         {
-            if (ai.IsAlive())
-            {
-                ai.ChangeState(new PursuingState(targetToAttack));
-            }
-           
-        } else if(ai.IsAlive())
-        {
-            RunAttacking(ai);
+            Debug.Log($"Target not in attack range! {targetToAttack}");
+            ai.ChangeState(new PursuingState(targetToAttack));
         }
-
-
-
+        RunAttacking(ai);
     }
 
 
@@ -68,6 +71,7 @@ public class AttackingState : EnemyStateBase
         // if target out of range pursue
         if (!ai.TargetIsInAttackRange(targetToAttack))
         {
+            Debug.Log($"Target not in attack range! {targetToAttack}");
             ai.TriggerPursuing(ai.Target);
         }
     }

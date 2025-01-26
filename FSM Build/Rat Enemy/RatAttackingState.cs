@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class RatAttackingState : EnemyStateBase
+public class RatAttackingState : AttackingState
 {
-    protected GameObject target;
+    
 
-    public RatAttackingState(GameObject target)
+    public RatAttackingState(GameObject target) : base(target)
     {
-        this.target = target;
+        this.targetToAttack = target;
     }
 
     public override void Enter(EnemyAI ai)
     {
-        base.Enter(ai);
+        Debug.Log($"Rat Attacking {targetToAttack}");
+        base.Enter(ai); 
         // Rat-specific enter behavior
     }
 

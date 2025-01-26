@@ -8,7 +8,7 @@ public class EnemyAI : BasicAI
     protected GameObject target;
     [SerializeField] protected float maxWanderDistance = 6;
     [SerializeField] protected float maxPursuitDistance = 15f;
-    [SerializeField] protected float attackRange = 1.75f;
+    [SerializeField] protected float attackRange = 2;
     protected Vector3 startPosition = Vector3.zero;
 
     // Attacking State Vars
@@ -51,6 +51,7 @@ public class EnemyAI : BasicAI
             currentState.Update(this);
         }
     }
+    
 
     public virtual void ChangeState(EnemyStateBase newState)
     {
@@ -68,10 +69,9 @@ public class EnemyAI : BasicAI
         {
             return;
         }
-        if (aiAlive)
-        {
-            ChangeState(new WanderingState(maxWanderDistance, startPosition));
-        }
+
+        ChangeState(new WanderingState(maxWanderDistance, startPosition));
+
     }
 
     public virtual void TriggerPursuing(GameObject targetToPursue)
@@ -80,12 +80,9 @@ public class EnemyAI : BasicAI
         {
             return;
         }
-
-        if (aiAlive)
-        {
             this.target = targetToPursue;
             ChangeState(new PursuingState(targetToPursue));
-        }
+        
     }
 
     public bool TargetIsOutofPursuitRange(GameObject targetToPursue)
@@ -95,6 +92,7 @@ public class EnemyAI : BasicAI
 
     public bool TargetIsInAttackRange(GameObject targetToPursue)
     {
+        Debug.Log($"Target in attack range ? {Vector3.Distance(transform.position, targetToPursue.transform.position) <= attackRange}");
         return Vector3.Distance(transform.position, targetToPursue.transform.position) <= attackRange;
     }
 
