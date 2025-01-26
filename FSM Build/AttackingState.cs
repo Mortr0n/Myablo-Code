@@ -21,13 +21,16 @@ public class AttackingState : EnemyStateBase
         } 
         base.Enter(ai);
         // start animation?  maybe animation would be in update?
+
+        // Keeps the enemies from walking through the player and pushing him around
         if (agent != null)
         {
             if (!agent.isStopped)
             {
-                agent.isStopped = false;
+                agent.isStopped = true;
             }
         }
+
         if (agent == null)
         {
             agent = ai.GetComponent<NavMeshAgent>();

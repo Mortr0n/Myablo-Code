@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class RoomManager : MonoBehaviour
 {
     [SerializeField] private List<Room> rooms; // Drag all room GameObjects here in the Inspector
-    [SerializeField] private GameObject spawnerPrefab;
+    [SerializeField] private List<GameObject> spawnerPrefab;
 
     private HashSet<Room> roomsWithKeysObtained = new HashSet<Room>();
     //private Room currentRoom;
@@ -23,7 +23,10 @@ public class RoomManager : MonoBehaviour
         {
             spawnerCount++;
             
-            GameObject spawnerObj = Instantiate(spawnerPrefab, spawnPointTransform.position, Quaternion.identity);
+            int spawnIdx = Random.Range(0, spawnerPrefab.Count);
+
+
+            GameObject spawnerObj = Instantiate(spawnerPrefab[spawnIdx], spawnPointTransform.position, Quaternion.identity);
             Debug.Log($"Instantiated {spawnerObj.name}");
             // Optionally, if your spawner needs to know about its key status, handle it here
             SpawnPoint spawnPoint = spawnPointTransform.GetComponent<SpawnPoint>();

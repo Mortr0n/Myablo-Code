@@ -26,7 +26,15 @@ public class PursuingState : EnemyStateBase
             originalSpeed = agent.speed;
             agent.speed *= runSpeedMultiplier;
         }
-
+        
+        // Turns enemy movement on as it gets disabled in other states to avoid pushing the player around
+        if (agent != null)
+        {
+            if (agent.isStopped)
+            {
+                agent.isStopped = false;
+            }
+        }
         // Set running animation
         BasicAnimator animator = ai.GetComponent<BasicAnimator>();
         if (animator != null)

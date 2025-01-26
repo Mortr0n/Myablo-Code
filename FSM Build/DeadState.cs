@@ -13,6 +13,8 @@ public class DeadState : EnemyStateBase
      
         agent = ai.GetComponent<NavMeshAgent>();
 
+
+        
         base.Enter(ai);
         //ai.UnAlive(); 
         //ai.TriggerDeath();

@@ -18,7 +18,16 @@ public class WanderingState : EnemyStateBase
         base.Enter(ai);
         
         agent = ai.GetComponent<NavMeshAgent>();
-        
+
+        //NOTE: Turns enemy movement on as it gets disabled in other states to avoid pushing the player around
+        if (agent != null)
+        {
+            if (agent.isStopped)
+            {
+                agent.isStopped = false;
+            }
+        }
+
         // Set walking animation
         BasicAnimator animator = ai.GetComponent<BasicAnimator>();
         if (animator != null)
