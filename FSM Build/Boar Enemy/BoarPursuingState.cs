@@ -5,6 +5,7 @@ public class BoarPursuingState : PursuingState
     public BoarPursuingState(GameObject target) : base(target)
     {
         // Boar-specific initialization if needed
+        runSpeedMultiplier = 2.5f;
     }
 
     public override void Enter(EnemyAI ai)

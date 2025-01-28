@@ -14,7 +14,7 @@ public class RoomManager : MonoBehaviour
         //currentRoom = newRoom;
 
         // Get 30% of spawn points and instantiate spawners
-        List<Transform> spawnPointTransforms = newRoom.GetRandomSpawnPoints(0.5f);
+        List<Transform> spawnPointTransforms = newRoom.GetRandomSpawnPoints(0.8f);
         Debug.Log($"{spawnPointTransforms} trans's");
 
         int spawnerCount = 0;

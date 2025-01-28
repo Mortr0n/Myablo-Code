@@ -9,6 +9,7 @@ public class BoarAttackingState : AttackingState
 
     public override void Enter(EnemyAI ai)
     {
+        Debug.Log("Boar Attacking");
         base.Enter(ai);
         // Boar-specific enter behavior
     }
