@@ -5,6 +5,7 @@ public class MiniHellWatcherPursuingState : PursuingState
     public MiniHellWatcherPursuingState(GameObject target) : base(target)
     {
         // MiniHellWatcher-specific initialization if needed
+        runSpeedMultiplier = 2.5f;
     }
 
     public override void Enter(EnemyAI ai)
@@ -17,6 +18,7 @@ public class MiniHellWatcherPursuingState : PursuingState
     {
         base.Update(ai);
         // MiniHellWatcher-specific pursuing logic
+        ai.speed = agent.velocity.magnitude;
     }
 
     public override void Exit(EnemyAI ai)

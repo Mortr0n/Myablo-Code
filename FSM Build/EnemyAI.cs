@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAI : BasicAI
@@ -17,6 +18,9 @@ public class EnemyAI : BasicAI
     protected float attackCooldownTimer = 0.0f;
     [SerializeField] protected GameObject attackPrefab;
     [SerializeField] protected float experienceValue = 45;
+
+    //NOTE: this is for debugging animations and is not to be used for anything other than seeing them in the inspector!!!
+    [SerializeField] public float speed;
     //public UnityEngine.AI.NavMeshAgent Agent
     //{
     //    get { return agent; }
@@ -52,6 +56,11 @@ public class EnemyAI : BasicAI
         }
     }
     
+    protected override void Update() 
+    {
+        base.Update();
+        speed = agent.velocity.magnitude;
+    }
 
     public virtual void ChangeState(EnemyStateBase newState)
     {

@@ -17,6 +17,8 @@ public class MiniHellWatcherWanderingState : WanderingState
     public override void Update(EnemyAI ai)
     {
         base.Update(ai);
+        ai.speed = agent.velocity.magnitude;
+        //Debug.Log($"Watcher speed {ai.speed}");
         // MiniHellWatcher-specific wandering logic
     }
 

@@ -4,7 +4,7 @@ public class EnemyAnimator : BasicAnimator
 {
     protected virtual void Update()
     {
-        DeltaMovement();
+        //DeltaMovement();
     }
     // this below should actually be made to be in the basic animator since we're using in playeranimator and enemyanimator 
     // made it into DeltaMovement for importing to the variouis animators as needed
