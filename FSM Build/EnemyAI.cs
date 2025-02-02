@@ -94,6 +94,8 @@ public class EnemyAI : BasicAI
         
     }
 
+    
+
     public bool TargetIsOutofPursuitRange(GameObject targetToPursue)
     {
         return Vector3.Distance(transform.position, targetToPursue.transform.position) > maxPursuitDistance;
@@ -115,6 +117,7 @@ public class EnemyAI : BasicAI
         this.target = targetToAttack;
         ChangeState(new AttackingState(target));
     }
+    
 
     public override void TriggerDeath()
     {

@@ -34,7 +34,6 @@ public class Room : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"the: {other.tag} room Trigger entered");
         if (!hasTriggered && other.CompareTag("Player"))
         {
             hasTriggered = true; // Ensure it only triggers once

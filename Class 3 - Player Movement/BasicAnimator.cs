@@ -11,7 +11,18 @@ public class BasicAnimator : MonoBehaviour
         thisAnimator.SetBool("Walking", val);
     }
 
+    public virtual void SetEntering(bool val)
+    {
+        thisAnimator.SetBool("Entering", val);
+    }
+
+    public virtual bool GetEntering()
+    {
+        return thisAnimator.GetBool("Entering");
+    }
+
     public virtual bool GetWalking()
+
     {
         return thisAnimator.GetBool("Walking");
     }

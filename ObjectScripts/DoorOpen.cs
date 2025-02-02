@@ -25,12 +25,10 @@ public class DoorOpen : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log($"{other.gameObject.tag} exited door trigger ");
         
         if (other.CompareTag("Player") && doorOpen) 
         {
-            Debug.Log("Door closing");
-            //gateAnimator.SetTrigger("DoorClose");
+
             gateAnimator.SetBool("isDoorOpen", false);
             doorOpen = false;
         }

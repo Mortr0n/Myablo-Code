@@ -50,7 +50,7 @@ public class WanderingState : EnemyStateBase
         base.Exit(ai);
     }
 
-    void GetNewWanderDestination(EnemyAI ai)
+    protected void GetNewWanderDestination(EnemyAI ai)
     {
         //Debug.Log("Getting new wander destination");
         float randomX = Random.Range(-maxWanderDistance, maxWanderDistance);
