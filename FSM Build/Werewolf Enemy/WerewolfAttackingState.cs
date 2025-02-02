@@ -5,6 +5,7 @@ public class WerewolfAttackingState : AttackingState
     public WerewolfAttackingState(GameObject target) : base(target)
     {
         // Werewolf-specific initialization if needed
+        Debug.Log("In Attack");
         this.targetToAttack = target;
     }
 

@@ -6,16 +6,16 @@ public class EnemySpawner : CombatReceiver
 {
 
     [SerializeField] private GameObject EnemyToSpawn;
-    private List<GameObject> spawnedEnemies = new List<GameObject>();
-    private float spawnRateTime = 1f;
-    private float spawnRange = 5f;
-    [SerializeField] private int maxSpawned = 15;
-    private bool spawnEnabled = true;
+    protected List<GameObject> spawnedEnemies = new List<GameObject>();
+    protected float spawnRateTime = 1f;
+    protected float spawnRange = 5f;
+    [SerializeField] protected int maxSpawned = 15;
+    protected bool spawnEnabled = true;
 
-    [SerializeField] private Room parentRoom;
+    [SerializeField] protected Room parentRoom;
     public Room ParentRoom { get => parentRoom;  set { parentRoom = value; } }
 
-    [SerializeField] private bool hasKey = false;
+    [SerializeField] protected bool hasKey = false;
     public bool HasKey { get => hasKey; set { hasKey = value; Debug.Log($"Spawner {name} HasKey set to to {hasKey}"); } }
     //[SerializeField] protected float serializedMaxHP = 200f;
 
@@ -42,7 +42,7 @@ public class EnemySpawner : CombatReceiver
         Debug.Log($"{collision.collider.name}: {collision.gameObject.name} was the collision");
     }
 
-    private void HandleSpawnedEnemyDeath(BasicAI enemyAI)
+    protected virtual void HandleSpawnedEnemyDeath(BasicAI enemyAI)
     {
 
         GameObject enemy = enemyAI.gameObject;
@@ -60,7 +60,7 @@ public class EnemySpawner : CombatReceiver
         
     }
 
-    void SpawnEnemy()
+    protected virtual void SpawnEnemy()
     {
         Vector3 spawnPos = GetRandomSpawnPos();
         //Vector3 offset = GetRandomRingOffset(minDistanceFromSpawner: 2f, maxDistanceFromSpawner: spawnRange);
@@ -73,7 +73,7 @@ public class EnemySpawner : CombatReceiver
     }
 
 
-    Vector3 GetRandomRingOffset(float minDistanceFromSpawner, float maxDistanceFromSpawner)
+    protected virtual Vector3 GetRandomRingOffset(float minDistanceFromSpawner, float maxDistanceFromSpawner)
     {
         // Random angle in [0..2π)
         float angle = Random.Range(0f, 2f * Mathf.PI);
@@ -89,7 +89,7 @@ public class EnemySpawner : CombatReceiver
         return new Vector3(x, 1f, z);
     }
 
-    Vector3 GetRandomSpawnPos()
+    protected virtual Vector3 GetRandomSpawnPos()
     {
         float xPos = Random.Range(-spawnRange, spawnRange);
         float zPos = Random.Range(-spawnRange, spawnRange);
@@ -97,7 +97,7 @@ public class EnemySpawner : CombatReceiver
         return new Vector3 (xPos, 1, zPos);
     }
 
-    IEnumerator SpawnTimer(float waitTime)
+   protected virtual IEnumerator SpawnTimer(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         
@@ -114,7 +114,7 @@ public class EnemySpawner : CombatReceiver
         }
     }
 
-    public void StartSpawner(float waitTimer = -1f) 
+    public virtual void StartSpawner(float waitTimer = -1f) 
     {
         if (waitTimer < 0f)
         {

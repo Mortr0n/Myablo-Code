@@ -5,6 +5,7 @@ public class RoomManager : MonoBehaviour
 {
     [SerializeField] private List<Room> rooms; // Drag all room GameObjects here in the Inspector
     [SerializeField] private List<GameObject> spawnerPrefab;
+    [SerializeField] public float spawnerSpawnPercent = .8f;
 
     private HashSet<Room> roomsWithKeysObtained = new HashSet<Room>();
     //private Room currentRoom;
@@ -14,7 +15,7 @@ public class RoomManager : MonoBehaviour
         //currentRoom = newRoom;
 
         // Get 30% of spawn points and instantiate spawners
-        List<Transform> spawnPointTransforms = newRoom.GetRandomSpawnPoints(0.8f);
+        List<Transform> spawnPointTransforms = newRoom.GetRandomSpawnPoints(spawnerSpawnPercent);
         Debug.Log($"{spawnPointTransforms} trans's");
 
         int spawnerCount = 0;

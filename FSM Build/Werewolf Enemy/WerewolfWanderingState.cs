@@ -6,6 +6,7 @@ public class WerewolfWanderingState : WanderingState
         : base(maxWanderDistance, startPosition)
     {
         // Werewolf-specific initialization if needed
+        Debug.Log("In Wander");
     }
 
     public override void Enter(EnemyAI ai)
@@ -17,7 +18,7 @@ public class WerewolfWanderingState : WanderingState
     public override void Update(EnemyAI ai)
     {
         base.Update(ai);
-        // Werewolf-specific wandering logic
+        ai.speed = agent.velocity.magnitude;
     }
 
     public override void Exit(EnemyAI ai)

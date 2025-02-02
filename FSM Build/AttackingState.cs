@@ -59,16 +59,18 @@ public class AttackingState : EnemyStateBase
 
     void RunAttacking(EnemyAI ai)
     {
-        //Debug.Log($"Running Attacking against ai {targetToAttack} timer {ai.AttackCooldownTimer}"); 
-        // Swing every attackCD second
+
+        // Swing every attack 
         ai.AttackCooldownTimer += Time.deltaTime;
 
         if (ai.AttackCooldownTimer >= ai.AttackCooldown)
         {
-            //Debug.Log("inside attack cooldown");
-            ai.AttackCooldownTimer -= ai.AttackCooldown;
-            SpawnAttackPrefab(ai);
             ai.GetComponent<EnemyAnimator>().TriggerAttack();
+
+            SpawnAttackPrefab(ai);
+            ai.AttackCooldownTimer -= ai.AttackCooldown;
+            
+            
         }
 
         // if target out of range pursue

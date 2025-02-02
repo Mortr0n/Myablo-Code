@@ -101,7 +101,7 @@ public class EnemyAI : BasicAI
 
     public bool TargetIsInAttackRange(GameObject targetToPursue)
     {
-        Debug.Log($"Target in attack range ? {Vector3.Distance(transform.position, targetToPursue.transform.position) <= attackRange}");
+        //Debug.Log($"Target in attack range ? {Vector3.Distance(transform.position, targetToPursue.transform.position) <= attackRange}");
         return Vector3.Distance(transform.position, targetToPursue.transform.position) <= attackRange;
     }
 

@@ -10,7 +10,16 @@ public class BasicAnimator : MonoBehaviour
     {
         thisAnimator.SetBool("Walking", val);
     }
-public virtual void SetRunning(bool val)
+
+    public virtual bool GetWalking()
+    {
+        return thisAnimator.GetBool("Walking");
+    }
+    public virtual bool GetRunning()
+    {
+        return thisAnimator.GetBool("Running");
+    }
+    public virtual void SetRunning(bool val)
     {
         thisAnimator.SetBool("Running", val);
     }

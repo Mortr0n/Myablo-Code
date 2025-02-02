@@ -4,7 +4,10 @@ public class WerewolfPursuingState : PursuingState
 {
     public WerewolfPursuingState(GameObject target) : base(target)
     {
+        this.target = target;
+        runSpeedMultiplier = 3.5f;
         // Werewolf-specific initialization if needed
+        Debug.Log("In Pursue");
     }
 
     public override void Enter(EnemyAI ai)

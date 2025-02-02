@@ -41,6 +41,7 @@ public class PursuingState : EnemyStateBase
         {
             animator.SetWalking(false);
             animator.SetRunning(true);
+            Debug.Log($"walk: {animator.GetWalking()} run: {animator.GetRunning()}");
         }
     }
 
@@ -59,11 +60,11 @@ public class PursuingState : EnemyStateBase
         }
 
         float distanceToTarget = Vector3.Distance(ai.transform.position, target.transform.position);
-        Debug.Log($"Dist to targ: {distanceToTarget} and {distanceToTarget < ai.AttackRange} and range {ai.AttackRange}");
+        //Debug.Log($"Dist to targ: {distanceToTarget} and {distanceToTarget < ai.AttackRange} and range {ai.AttackRange}");
         if (agent == null)
         {
             agent = ai.GetComponent<NavMeshAgent>();
-            Debug.Log($"agent {agent} isStopped {agent.isStopped}");
+            //Debug.Log($"agent {agent} isStopped {agent.isStopped}");
         }
 
         if (distanceToTarget <= ai.AttackRange)
