@@ -5,8 +5,9 @@ public class EnemyAI : BasicAI
 {
     private EnemyStateBase currentState;
 
+    public MonoBehaviour monoBehaviour;
     // Pursuing State Vars
-    protected GameObject target;
+    [SerializeField] protected GameObject target;
     [SerializeField] protected float maxWanderDistance = 6;
     [SerializeField] protected float maxPursuitDistance = 15f;
     [SerializeField] protected float attackRange = 2;
@@ -41,6 +42,7 @@ public class EnemyAI : BasicAI
     public float AttackCooldownTimer { get { return attackCooldownTimer; } set { attackCooldownTimer = value; } }
     public GameObject AttackPrefab { get { return attackPrefab; } }
     public float ExperienceValue { get { return experienceValue; } }
+
     protected virtual void Start()
     {
         //Debug.Log("Start FSMAI");
@@ -116,6 +118,15 @@ public class EnemyAI : BasicAI
 
         this.target = targetToAttack;
         ChangeState(new AttackingState(target));
+    }
+
+    public virtual void TriggerEntering(GameObject targetToPursue)
+    {
+        if (!aiAlive || targetToPursue == null) return;
+
+        target = targetToPursue;
+        
+        ChangeState(new EnteringState(target));
     }
     
 

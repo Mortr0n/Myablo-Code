@@ -11,6 +11,16 @@ public class SpiderQueenPursuingState : PursuingState
     {
         base.Enter(ai);
         // SpiderQueen-specific enter behavior
+        agent = ai.GetComponent<UnityEngine.AI.NavMeshAgent>();
+
+        //NOTE: Turns enemy movement on as it gets disabled in other states to avoid pushing the player around
+        if (agent != null)
+        {
+            if (agent.isStopped)
+            {
+                agent.isStopped = false;
+            }
+        }
     }
 
     public override void Update(EnemyAI ai)
