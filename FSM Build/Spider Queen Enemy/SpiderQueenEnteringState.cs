@@ -4,25 +4,28 @@ using System.Collections.Generic;
 
 public class SpiderQueenEnteringState : EnemyStateBase
 {
-    [SerializeField] protected GameObject stateTarget;
-    
+    //[SerializeField] protected GameObject stateTarget;
+    [SerializeField] protected BasicAnimator animator;
 
-    public SpiderQueenEnteringState(GameObject target)
+
+    public SpiderQueenEnteringState(BasicAnimator animator)
     {
-        this.stateTarget = target;
+        this.animator = animator;
+        //this.stateTarget = target;
+        //animator = GetComponentInParent<BasicAnimator>();
     }
 
     public override void Enter(EnemyAI ai)
     {
         base.Enter(ai);
-
-
+        animator.SetEntering(true);
+        ai.SetSleeping(false);
+        Debug.Log($"sleep: {ai.GetSleeping()}, Enter: {animator.GetEntering()}");
     }
 
     public override void Update(EnemyAI ai)
     {
         base.Update(ai);      
-        
     }
 
     //public IEnumerator EnteranceWait(EnemyAI ai, BasicAnimator animator, GameObject targetToPursue) 

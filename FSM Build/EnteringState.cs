@@ -8,9 +8,9 @@ public class EnteringState : EnemyStateBase
     protected UnityEngine.AI.NavMeshAgent agent;
 
 
-    public EnteringState(GameObject target) 
+    public EnteringState(BasicAnimator animator) 
     {
-        this.stateTarget = target;
+        //this.stateTarget = target;
     }
 
     public void Enter(EnemyAI ai)

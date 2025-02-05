@@ -12,7 +12,7 @@ public class EnemyAI : BasicAI
     [SerializeField] protected float maxPursuitDistance = 15f;
     [SerializeField] protected float attackRange = 2;
     protected Vector3 startPosition = Vector3.zero;
-
+    [SerializeField] protected bool sleeping;
     // Attacking State Vars
     [SerializeField] protected float damage = 3;
     [SerializeField] protected float attackCooldown = 2.5f;
@@ -27,20 +27,21 @@ public class EnemyAI : BasicAI
     //    get { return agent; }
     //}
 
+
     public GameObject Target { get { return target; } }
 
     //public UnityEngine.AI.NavMeshAgent Agent { get { return agent; } }
     // Pursuing Props
     public float MaxWanderDistance { get { return maxWanderDistance; } }
     public float MaxPursuitDistance { get { return maxPursuitDistance; } }
-    public float AttackRange { get { return attackRange; } }
+    public float AttackRange { get { return attackRange; } set { attackRange = value; } }
     public Vector3 StartPosition { get { return startPosition; } }
 
     // Attacking Props
     public float Damage { get { return damage; } }
     public float AttackCooldown { get { return attackCooldown; } }
     public float AttackCooldownTimer { get { return attackCooldownTimer; } set { attackCooldownTimer = value; } }
-    public GameObject AttackPrefab { get { return attackPrefab; } }
+    public GameObject AttackPrefab { get { return attackPrefab; }  }
     public float ExperienceValue { get { return experienceValue; } }
 
     protected virtual void Start()
@@ -57,11 +58,25 @@ public class EnemyAI : BasicAI
             currentState.Update(this);
         }
     }
+    public void SetAttackRange(float range)
+    {
+        AttackRange = range;
+    }
     
     protected override void Update() 
     {
         base.Update();
         speed = agent.velocity.magnitude;
+    }
+
+    public bool GetSleeping()
+    {
+        return sleeping;
+    }
+
+    public void SetSleeping(bool sleepSet)
+    {
+        sleeping = sleepSet;
     }
 
     public virtual void ChangeState(EnemyStateBase newState)
@@ -120,13 +135,13 @@ public class EnemyAI : BasicAI
         ChangeState(new AttackingState(target));
     }
 
-    public virtual void TriggerEntering(GameObject targetToPursue)
+    public virtual void TriggerEntering(BasicAnimator animator)
     {
-        if (!aiAlive || targetToPursue == null) return;
+        if (!aiAlive || animator == null) return;
 
-        target = targetToPursue;
+        //target = animator;
         
-        ChangeState(new EnteringState(target));
+        ChangeState(new EnteringState(animator));
     }
     
 

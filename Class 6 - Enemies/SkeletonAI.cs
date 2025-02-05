@@ -107,6 +107,7 @@ public class SkeletonAI : BasicAI
             TriggerWandering();
             return; 
         }
+        
         // go to targets position
         agent.destination = target.transform.position;
 

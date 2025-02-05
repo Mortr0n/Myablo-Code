@@ -41,7 +41,6 @@ public class PursuingState : EnemyStateBase
         {
             animator.SetWalking(false);
             animator.SetRunning(true);
-            Debug.Log($"walk: {animator.GetWalking()} run: {animator.GetRunning()}");
         }
     }
 

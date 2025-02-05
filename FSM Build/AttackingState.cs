@@ -34,7 +34,6 @@ public class AttackingState : EnemyStateBase
         if (agent == null)
         {
             agent = ai.GetComponent<NavMeshAgent>();
-            Debug.Log($"agent {agent} isStopped {agent.isStopped}");
         }
         
         RunAttacking(ai);
@@ -50,7 +49,6 @@ public class AttackingState : EnemyStateBase
         }
         if (!ai.TargetIsInAttackRange(targetToAttack))
         {
-            Debug.Log($"Target not in attack range! {targetToAttack}");
             ai.ChangeState(new PursuingState(targetToAttack));
         }
         RunAttacking(ai);
@@ -76,7 +74,6 @@ public class AttackingState : EnemyStateBase
         // if target out of range pursue
         if (!ai.TargetIsInAttackRange(targetToAttack))
         {
-            Debug.Log($"Target not in attack range! {targetToAttack}");
             ai.TriggerPursuing(ai.Target);
         }
     }
@@ -89,7 +86,9 @@ public class AttackingState : EnemyStateBase
         Vector3 spawnPosition = (attackDirection.normalized * ai.AttackRange) + ai.Agent.transform.position;
 
         GameObject newAttack = Object.Instantiate(ai.AttackPrefab, spawnPosition, Quaternion.identity);
-        newAttack.GetComponent<CombatActor>().SetFactionID(ai.FactionID);
+        CombatActor ca = newAttack.GetComponent<CombatActor>();
+        ca.SetFactionID(ai.FactionID);
+        ca.InitializeDamage(ai.Damage);
 
     }
 }
