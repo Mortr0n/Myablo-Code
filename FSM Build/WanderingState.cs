@@ -17,6 +17,8 @@ public class WanderingState : EnemyStateBase
     {
         base.Enter(ai);
         
+        ai.ResetAttackCount();
+
         agent = ai.GetComponent<NavMeshAgent>();
 
         //NOTE: Turns enemy movement on as it gets disabled in other states to avoid pushing the player around

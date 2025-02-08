@@ -6,6 +6,7 @@ public class AttackingState : EnemyStateBase
 {
     protected GameObject targetToAttack;
     protected NavMeshAgent agent;
+    private int atkCount = 0;
 
     //
     public AttackingState(GameObject target)
@@ -61,14 +62,14 @@ public class AttackingState : EnemyStateBase
         // Swing every attack 
         ai.AttackCooldownTimer += Time.deltaTime;
 
-        if (ai.AttackCooldownTimer >= ai.AttackCooldown)
+        if (ai.AttackCooldownTimer >= ai.AttackCooldown || ai.AttackCount == 0)
         {
+            ai.AttackCountInc();
+
             ai.GetComponent<EnemyAnimator>().TriggerAttack();
 
             SpawnAttackPrefab(ai);
             ai.AttackCooldownTimer -= ai.AttackCooldown;
-            
-            
         }
 
         // if target out of range pursue

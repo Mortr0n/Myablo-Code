@@ -17,7 +17,7 @@ public class PursuingState : EnemyStateBase
     public override void Enter(EnemyAI ai)
     {
         base.Enter(ai);
-        
+
         // Cache and modify NavMeshAgent
         agent = ai.GetComponent<NavMeshAgent>();
 

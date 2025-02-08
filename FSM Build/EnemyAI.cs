@@ -13,6 +13,7 @@ public class EnemyAI : BasicAI
     [SerializeField] protected float attackRange = 2;
     protected Vector3 startPosition = Vector3.zero;
     [SerializeField] protected bool sleeping;
+    [SerializeField] protected int attackCount = 0;
     // Attacking State Vars
     [SerializeField] protected float damage = 3;
     [SerializeField] protected float attackCooldown = 2.5f;
@@ -41,6 +42,7 @@ public class EnemyAI : BasicAI
     public float Damage { get { return damage; } }
     public float AttackCooldown { get { return attackCooldown; } }
     public float AttackCooldownTimer { get { return attackCooldownTimer; } set { attackCooldownTimer = value; } }
+    public int AttackCount { get { return attackCount; } }
     public GameObject AttackPrefab { get { return attackPrefab; }  }
     public float ExperienceValue { get { return experienceValue; } }
 
@@ -49,6 +51,17 @@ public class EnemyAI : BasicAI
         //Debug.Log("Start FSMAI");
         startPosition = transform.position;
         ChangeState(new WanderingState(maxWanderDistance, startPosition));
+    }
+
+    public virtual  void AttackCountInc()
+    {
+        attackCount++;
+        return;
+    }
+
+    public virtual void ResetAttackCount()
+    {
+        attackCount = 0;
     }
 
     protected override void RunAI()
