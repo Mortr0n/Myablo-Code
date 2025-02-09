@@ -38,7 +38,7 @@ public class TeslaEquippableAbility : EquippableAbility
         newAttack.GetComponent<LightningCA>().SetFactionID(myPlayer.GetFactionID());
         newAttack.GetComponent<LightningCA>().SetShootDirection(myPlayer.transform.forward);
 
-        float calculatedDamage = 1 + (2 * skillLevel);
+        float calculatedDamage = .25f + (.25f * skillLevel);
         newAttack.GetComponent<LightningCA>().InitializeDamage(calculatedDamage);
     }
 }
