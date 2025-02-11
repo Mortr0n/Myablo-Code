@@ -74,7 +74,7 @@ public class LightningCA : CombatActor
 
             // Optionally, you might add visual effects or sounds here.
             // For example, if you want to play a small explosion effect:
-            EffectsManager.instance.PlaySmallBoom(transform.position, 1);
+            EffectsManager.instance.PlayLightningHit(other.transform.position, .5f);
         }
     }
 }
