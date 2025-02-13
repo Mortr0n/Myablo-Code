@@ -23,7 +23,7 @@ public class WerewolfAI : EnemyAI
 
     public override void TriggerWandering()
     {
-        Debug.Log("Wandering triggered");
+        //Debug.Log("Wandering triggered");
         if (!aiAlive) return;
         
         // Use Werewolf-specific wandering state
@@ -33,7 +33,7 @@ public class WerewolfAI : EnemyAI
     public override void TriggerPursuing(GameObject targetToPursue)
     {
         if (!aiAlive) return;
-        Debug.Log("Pursuing triggered");
+        //Debug.Log("Pursuing triggered");
         target = targetToPursue;
         // Use Werewolf-specific pursuing state
         ChangeState(new WerewolfPursuingState(targetToPursue));
@@ -42,7 +42,7 @@ public class WerewolfAI : EnemyAI
     public override void TriggerAttacking(GameObject targetToAttack)
     {
         if (!aiAlive) return;
-        Debug.Log("Attacking triggered");
+        //Debug.Log("Attacking triggered");
         target = targetToAttack;
         // Use Werewolf-specific attacking state
         ChangeState(new WerewolfAttackingState(target));

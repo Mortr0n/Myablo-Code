@@ -1,11 +1,18 @@
 using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
     //[SerializeField] GameObject testSphere; //this was for testing.  No longer needed, but useful for seeing if your raycast stuff works remember to add the sphere to the player prefab field
     NavMeshAgent agent;
+    bool isDashing = false;
+    [SerializeField] float dashDuration = .2f;
+    [SerializeField] float dashSpeed = 10f;
+    Vector3 lastMovementDirection = Vector3.zero;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -14,11 +21,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Original way before MoveToLocation was made.
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    RunClickMovement();
-        //}
+        if (agent.velocity.magnitude > .1f)
+        {
+            lastMovementDirection = agent.velocity.normalized;
+        }
     }
 
 
@@ -42,6 +48,38 @@ public class PlayerMovement : MonoBehaviour
     public void MoveToLocation(Vector3 location)
     {
         agent.destination = location;
+    }
+    public void PerformDash(Vector3 direction)
+    {
+        Debug.Log($"Perform Dash {direction} isDashing? {isDashing}");
+        if (!isDashing)
+        {
+            StartCoroutine(DashCoroutine(direction));
+        }
+    }
+
+    public Vector3 GetLastMovementDirection()
+    {
+        return lastMovementDirection;
+    }
+
+    IEnumerator DashCoroutine(Vector3 direction)
+    {
+        isDashing = true;
+        float originalSpeed = agent.speed;
+        agent.isStopped = true;
+
+        float elapsedTime = 0;
+        while (elapsedTime < dashDuration)
+        {
+            agent.Move(direction * dashSpeed * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        agent.isStopped = false;
+        agent.speed = originalSpeed;
+        isDashing = false;
     }
 
 }

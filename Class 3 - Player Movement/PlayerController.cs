@@ -1,4 +1,6 @@
 using System;
+using UnityEditor.Experimental.GraphView;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PlayerController : Clickable
@@ -12,6 +14,8 @@ public class PlayerController : Clickable
     bool alive = true;
     int factionID = 1;
     bool inDialog = false;
+    Vector3 dashDirection = Vector3.zero;
+
 
     public static PlayerController instance;
     private void Awake()
@@ -41,9 +45,43 @@ public class PlayerController : Clickable
     {
         if (inDialog) return;
         if (!alive) return;
-
+        
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            dashDirection = Vector3.forward;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            dashDirection = Vector3.back;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            dashDirection = Vector3.right;
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            dashDirection = Vector3.left;
+        }
         if (Input.GetMouseButtonDown(0) && ability1 != null) UseAbility1();
         if (Input.GetMouseButtonDown(1) && ability2 != null) UseAbility2();
+        if (Input.GetKeyDown(KeyCode.Space) && dashDirection != Vector3.zero)
+        {
+            
+           
+            Dash(dashDirection);
+        }
+    }
+
+    protected void Dash(Vector3 direction)
+    {
+        //myPlayer = player;
+        Debug.Log($"myPlayer: {this} Direction: {direction}");
+        Vector3 dashDirection = direction;
+
+        // Prevent dashing in place
+        if (dashDirection == Vector3.zero) return;
+
+        this.Movement().PerformDash(dashDirection);
     }
 
 

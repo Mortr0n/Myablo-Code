@@ -68,7 +68,23 @@ public class EquippableAbility : ClassSkill
     protected virtual void Update()
     {
         if (targetedReceiver != null)   RunTargetAttack();
+
+        //if (Input.GetKeyDown(KeyCode.Space)) 
+        //{
+        //    Dash();
+        //}
     }
+    //protected void Dash()
+    //{
+    //    myPlayer = player;
+    //    Debug.Log($"myPlayer: {myPlayer}");
+    //    Vector3 dashDirection = myPlayer.Movement().GetLastMovementDirection();
+
+    //    // Prevent dashing in place
+    //    if (dashDirection == Vector3.zero) return;
+
+    //    myPlayer.Movement().PerformDash(dashDirection);
+    //}
 
     protected virtual void RunTargetAttack()
     {
