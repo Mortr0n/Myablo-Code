@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     NavMeshAgent agent;
     bool isDashing = false;
     [SerializeField] float dashDuration = .2f;
-    [SerializeField] float dashSpeed = 10f;
+    [SerializeField] float dashSpeed = 15f;
     Vector3 lastMovementDirection = Vector3.zero;
 
     void Start()

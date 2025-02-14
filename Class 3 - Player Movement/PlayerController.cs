@@ -45,22 +45,32 @@ public class PlayerController : Clickable
     {
         if (inDialog) return;
         if (!alive) return;
-        
+
+        // cam relative move direction
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+
+        // Flatten to ignore vertical movement
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+
         if (Input.GetKeyDown(KeyCode.W))
         {
-            dashDirection = Vector3.forward;
+            dashDirection = camForward;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            dashDirection = Vector3.back;
+            dashDirection = -camForward;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            dashDirection = Vector3.right;
+            dashDirection = camRight;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            dashDirection = Vector3.left;
+            dashDirection = -camRight;
         }
         if (Input.GetMouseButtonDown(0) && ability1 != null) UseAbility1();
         if (Input.GetMouseButtonDown(1) && ability2 != null) UseAbility2();

@@ -24,8 +24,12 @@ public class CameraFollow : MonoBehaviour
             return;
         }
 
+
         // 1. Get horizontal input (arrow keys, A/D, or joystick X axis by default)
-        float horizontalInput = Input.GetAxis("Horizontal");
+        //float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = 0f;
+        if (Input.GetKey(KeyCode.Q)) horizontalInput = -1f;
+        if (Input.GetKey(KeyCode.E)) horizontalInput = 1f;
 
         // 2. Update our rotation value based on horizontal input
         currentYRotation += horizontalInput * rotationSpeed * Time.deltaTime;
