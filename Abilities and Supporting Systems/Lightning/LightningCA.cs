@@ -32,23 +32,7 @@ public class LightningCA : CombatActor
 
     void Update()
     {
-        //// If the timer is active, update the shoot direction to follow the mouse.
-        //if (followMouseTimer > 0)
-        //{
-        //    followMouseTimer -= Time.deltaTime;
 
-        //    // Define a horizontal plane at the lightning's Y position.
-        //    Plane plane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0));
-        //    Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //    float enter;
-        //    if (plane.Raycast(mouseRay, out enter))
-        //    {
-        //        Vector3 mouseWorldPos = mouseRay.GetPoint(enter);
-        //        // Calculate the new direction from the lightning's position to the mouse world position.
-        //        shootDirection = (mouseWorldPos - transform.position).normalized;
-        //        transform.forward = shootDirection;
-        //    }
-        //}
     }
 
     //TODO: need to figure out why lighning doesn't hit the spawners.  I think it's probably a layer thing!

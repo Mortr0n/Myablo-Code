@@ -18,15 +18,18 @@ public class CombatActor : MonoBehaviour
 
     protected virtual void HitReceiver(CombatReceiver target)
     {
-        //Debug.Log($"Test Hit {target}");
+        Debug.Log($"Damaging {target}");
         target.TakeDamage(damage);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("on trigger combat actor ");
+        //Debug.Log($"on trigger combat actor ");
         CombatReceiver combatReceiver = other.GetComponent<CombatReceiver>();
-        //Debug.Log($"combat receiver {combatReceiver} is trigger? {other.isTrigger}");
+        if (combatReceiver != null)
+        {
+            Debug.Log($"{this.name}: isName ::: combat receiver {combatReceiver} is trigger? {other.isTrigger} faction: {combatReceiver.GetFactionID()} otherfaction: {factionID} {other.name}");
+        }
         if (combatReceiver != null && !other.isTrigger)
         {
             //Debug.Log($"Inside first if trigger? {other.isTrigger}");

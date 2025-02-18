@@ -9,9 +9,13 @@ public class PlayerMovement : MonoBehaviour
     //[SerializeField] GameObject testSphere; //this was for testing.  No longer needed, but useful for seeing if your raycast stuff works remember to add the sphere to the player prefab field
     NavMeshAgent agent;
     bool isDashing = false;
-    [SerializeField] float dashDuration = .2f;
-    [SerializeField] float dashSpeed = 15f;
+    [SerializeField] float dashDuration = 2f;
+    [SerializeField] float dashSpeed = 1045f;
+    float dashPauseTime = 1f;
+   
+    
     Vector3 lastMovementDirection = Vector3.zero;
+    Vector3 dashEnd = Vector3.zero;
 
     void Start()
     {
@@ -56,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(DashCoroutine(direction));
         }
+        
     }
 
     public Vector3 GetLastMovementDirection()
@@ -69,6 +74,10 @@ public class PlayerMovement : MonoBehaviour
         float originalSpeed = agent.speed;
         agent.isStopped = true;
 
+        //// Calculate dash target position
+        //Vector3 dashStart = transform.position;
+        //Vector3 dashTarget = dashStart + direction.normalized * dashSpeed * dashDuration;
+
         float elapsedTime = 0;
         while (elapsedTime < dashDuration)
         {
@@ -77,9 +86,21 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
+        // re-enable the navmesh movement reset speed and set dash to false
         agent.isStopped = false;
         agent.speed = originalSpeed;
+        //isDashing = false;
+        StartCoroutine(EnableDashTimer(dashPauseTime));
+
+        // need to stop character from trying to run to original destination after dash
+        agent.ResetPath();
+    }
+
+    IEnumerator EnableDashTimer(float pauseTime)
+    {
+        yield return new WaitForSeconds(pauseTime);
         isDashing = false;
+
     }
 
 }

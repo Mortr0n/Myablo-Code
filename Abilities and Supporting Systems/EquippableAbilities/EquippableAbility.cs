@@ -46,7 +46,7 @@ public class EquippableAbility : ClassSkill
     protected virtual void SpawnEquippedAttack(Vector3 location)
     {
         GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
-        //Debug.Log($"faction: {myPlayer.GetFactionID()}");
+        //Debug.Log($"!!!! {this.name} newAttack: {newAttack} prefab: {spawnablePrefab.name}");
         newAttack.GetComponent<CombatActor>().SetFactionID(myPlayer.GetFactionID());
 
         float critMod = 1;

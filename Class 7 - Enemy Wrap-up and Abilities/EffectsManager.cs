@@ -5,7 +5,7 @@ public class EffectsManager : MonoBehaviour
     public static EffectsManager instance;
 
     [SerializeField] GameObject smallEffect;
-    [SerializeField] GameObject bigEffect;
+    [SerializeField] GameObject bigEffect; 
     [SerializeField] GameObject lightningEffect;
     private void Awake()
     {

@@ -2,6 +2,7 @@ using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : Clickable
 {
@@ -76,8 +77,6 @@ public class PlayerController : Clickable
         if (Input.GetMouseButtonDown(1) && ability2 != null) UseAbility2();
         if (Input.GetKeyDown(KeyCode.Space) && dashDirection != Vector3.zero)
         {
-            
-           
             Dash(dashDirection);
         }
     }
@@ -91,7 +90,8 @@ public class PlayerController : Clickable
         // Prevent dashing in place
         if (dashDirection == Vector3.zero) return;
 
-        this.Movement().PerformDash(dashDirection);
+         this.Movement().PerformDash(dashDirection);
+        
     }
 
 
