@@ -9,6 +9,7 @@ public class PlayerCombat : CombatReceiver
     protected float healthRegenBase = 0.5f;
     protected float healthRegenMod = 1f;
     protected float manaRegenBase = .5f;
+    protected float healthMod = .1f;
     protected float manaRegenMod = 1f;
     protected float regenUpdateTickTimer = 0;
     protected float regenUpdateTickTime = 2f;
@@ -127,6 +128,29 @@ public class PlayerCombat : CombatReceiver
     {
         healthRegenBase = .5f + (.01f * PlayerCharacterSheet.instance.GetVitality());
         manaRegenBase = .5f + (.01f * PlayerCharacterSheet.instance.GetEnergy());
+    }
+
+    #endregion
+
+    #region Health Management
+
+    public void Heal(float amount)
+    {
+        currentHP += amount;
+        if (currentHP > maxHP)
+            currentHP = maxHP;
+        EventsManager.instance.onHealthChanged.Invoke(currentHP / maxHP);
+    }
+
+    public void SetHealMod(float newMod)
+    {
+
+        healthMod = newMod;
+    }
+
+    public float GetHealAmount()
+    {
+        return healthMod * GetMaxHealth();
     }
 
     #endregion

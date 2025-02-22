@@ -19,6 +19,8 @@ public class CombatReceiver : Clickable
     //    get;
     //}
 
+    public float GetMaxHealth() { return maxHP; }
+
     public virtual void Die() 
     {
         //Debug.Log($"Died alive var is {alive}");

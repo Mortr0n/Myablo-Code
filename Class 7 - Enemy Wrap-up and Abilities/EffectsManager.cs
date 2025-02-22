@@ -7,6 +7,7 @@ public class EffectsManager : MonoBehaviour
     [SerializeField] GameObject smallEffect;
     [SerializeField] GameObject bigEffect; 
     [SerializeField] GameObject lightningEffect;
+    [SerializeField] GameObject impactEffect;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -49,5 +50,9 @@ public class EffectsManager : MonoBehaviour
     public void PlayLightningHit(Vector3 location, float duration, Transform effectParent = null)
     {
         SpawnEffect(lightningEffect, location, duration, effectParent);
+    }
+    public void PlayImpactHit(Vector3 location, float duration, Transform effectParent = null)
+    {
+        SpawnEffect(impactEffect, location, duration, effectParent);
     }
 }

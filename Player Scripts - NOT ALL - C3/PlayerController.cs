@@ -84,7 +84,7 @@ public class PlayerController : Clickable
     protected void Dash(Vector3 direction)
     {
         //myPlayer = player;
-        Debug.Log($"myPlayer: {this} Direction: {direction}");
+        //Debug.Log($"myPlayer: {this} Direction: {direction}");
         Vector3 dashDirection = direction;
 
         // Prevent dashing in place
