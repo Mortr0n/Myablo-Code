@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class HealSelfCA : CombatActor
 {
-    private void Start()
+    private void Update()
     {
-        Destroy(gameObject, 3f);
+        if (PlayerController.instance.Combat().GetCurrentShield() <= 0) Destroy(gameObject, .1f);
     }
     
 }

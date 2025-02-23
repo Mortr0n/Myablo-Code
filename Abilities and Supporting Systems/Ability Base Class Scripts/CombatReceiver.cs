@@ -39,11 +39,11 @@ public class CombatReceiver : Clickable
         return factionID; 
     }
 
+
     public virtual void TakeDamage(float amount)
     {
         Debug.Log($"Taking Damage {amount}");
         if (!alive) { return; }
-
         currentHP -= amount;
         if(currentHP <= 0) Die();
     }

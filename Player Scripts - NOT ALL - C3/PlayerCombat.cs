@@ -4,6 +4,8 @@ public class PlayerCombat : CombatReceiver
 {
     protected float currentMana = 35;
     [SerializeField] protected float maxMana = 35;
+    [SerializeField] protected float shieldSize = 10f;
+    [SerializeField] protected float currentShield = 0;
 
     // Regen Vars
     protected float healthRegenBase = 0.5f;
@@ -14,9 +16,16 @@ public class PlayerCombat : CombatReceiver
     protected float regenUpdateTickTimer = 0;
     protected float regenUpdateTickTime = 2f;
 
+
+    public float GetCurrentShield() { return currentShield; }
+    public void SetCurrentShield(float newShield) { currentShield = newShield; }
+    public void SetShieldSize(float newSize) { shieldSize = newSize; }
+    public float GetShieldSize() { return shieldSize; }
+
     protected void Update()
     {
         if (alive) RunRegen();
+        if (currentShield <= 0) PlayerController.instance.SetShieldInactive();
     }
 
     protected override void Start()
@@ -34,10 +43,33 @@ public class PlayerCombat : CombatReceiver
         EventsManager.instance.onStatPointSpent.RemoveListener(StatsChangedAdjustment);
     }
 
+    //public override void TakeDamage(float amount)
+    //{
+    //    //Debug.Log("Take Damage");
+    //    base.TakeDamage(amount);
+    //    EventsManager.instance.onHealthChanged.Invoke(currentHP / maxHP);
+    //}
+
     public override void TakeDamage(float amount)
     {
-        //Debug.Log("Take Damage");
-        base.TakeDamage(amount);
+        Debug.Log($"Taking Damage {amount}");
+        if (!alive) { return; }
+        //TODO: Could change shield logic to only block a percentage of damage, that can be increased with level. But I'm staying simple for now
+        if (currentShield > 0)
+        {
+            if (currentShield >= amount)
+            {
+                currentShield -= amount;
+                return;
+            }
+            else
+            {
+                amount -= currentShield;
+                currentShield = 0;
+            }
+        }
+        currentHP -= amount;
+        if (currentHP <= 0) Die();
         EventsManager.instance.onHealthChanged.Invoke(currentHP / maxHP);
     }
 
@@ -152,6 +184,8 @@ public class PlayerCombat : CombatReceiver
     {
         return healthMod * GetMaxHealth();
     }
+
+
 
     #endregion
 }

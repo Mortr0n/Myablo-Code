@@ -10,6 +10,8 @@ public class PlayerController : Clickable
 
     [SerializeField] EquippableAbility ability1;
     [SerializeField] EquippableAbility ability2;
+
+    [SerializeField] GameObject magicShield;
         
     
     bool alive = true;
@@ -19,6 +21,17 @@ public class PlayerController : Clickable
 
 
     public static PlayerController instance;
+
+    public void SetShieldActive()
+    {
+        magicShield.SetActive(true);
+    }
+
+    public void SetShieldInactive()
+    {
+        magicShield.SetActive(false);
+    }
+
     private void Awake()
     {
         if (instance == null) { instance = this; }
