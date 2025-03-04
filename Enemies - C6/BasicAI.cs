@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;  // for navmesh agents and moving using nav mesh agents
 
@@ -76,5 +77,12 @@ public class BasicAI : MonoBehaviour
         }
 
         agent.enabled = false;  // stops it from interacting with everything in the game
+        StartCoroutine(RemoveBodies(5f));
+    }
+
+    public IEnumerator RemoveBodies(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(gameObject);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Room : MonoBehaviour
 {
     [SerializeField] private List<SpawnPoint> spawnPoints;
+    [SerializeField] private Transform bossSpawnPoint;
     public int keyIndex;
     public RoomManager roomManager;
 
@@ -28,6 +29,11 @@ public class Room : MonoBehaviour
 
         // returning transforms for spawner instantiation
         return selectedPoints.ConvertAll(spawnPoint =>  spawnPoint.transform);
+    }
+
+    public Transform GetBossSpawnPoint()
+    {
+        return bossSpawnPoint.transform;
     }
 
     private bool hasTriggered = false;

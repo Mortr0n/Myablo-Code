@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerCombat : CombatReceiver
 {
     protected float currentMana = 35;
+    [SerializeField] private bool isInvincible = false;
     [SerializeField] protected float maxMana = 35;
     [SerializeField] protected float shieldSize = 10f;
     [SerializeField] protected float currentShield = 0;
@@ -52,6 +53,7 @@ public class PlayerCombat : CombatReceiver
 
     public override void TakeDamage(float amount)
     {
+        if (isInvincible) return;
         Debug.Log($"Taking Damage {amount}");
         if (!alive) { return; }
         //TODO: Could change shield logic to only block a percentage of damage, that can be increased with level. But I'm staying simple for now

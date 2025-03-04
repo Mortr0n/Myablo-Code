@@ -94,7 +94,7 @@ public class EnemySpawner : CombatReceiver
         float xPos = Random.Range(-spawnRange, spawnRange);
         float zPos = Random.Range(-spawnRange, spawnRange);
 
-        return new Vector3 (xPos, 1, zPos);
+        return new Vector3 (xPos, 0, zPos);
     }
 
    protected virtual IEnumerator SpawnTimer(float waitTime)
