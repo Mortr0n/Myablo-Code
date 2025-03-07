@@ -86,16 +86,24 @@ public class RoomManager : MonoBehaviour
 
     private void MarkKeyAsObtained(Room room)
     {
+        Debug.Log($"{room.name}'s key acquired.  Crazy things now ::: room: {room} idx: {currentRoomIndex} idx + 1: {currentRoomIndex + 1} ");
         if(!roomsWithKeysObtained.Contains(room))
         {
             roomsWithKeysObtained.Add(room);
+            //FIXME: I am testing the other message and must deleted it and run the one below instead.  Don't forget!!!
             StartCoroutine(UIManager.instance.RunNotificationText($"Acquired Key for next area!", 3f));
-            if((currentRoomIndex+1) % 3 == 0) 
+
+            //FIXME: Delete this line and uncomment the one above for final product
+            //NOTE: Maybe do back to back notification so that 2 messages can alert the player about the boss being around and then you not being able to move on until the boss is dead
+            //StartCoroutine(UIManager.instance.RunNotificationText($"Boss Spawned look for unique area!  Boss must die for you to move on", 5f));
+            if ((currentRoomIndex) % 3 == 0) 
             {
                 // Get boss spawn loc
                 Transform bossSpawnPoint = room.GetBossSpawnPoint();
                 // Spawn the boss
-                Instantiate(spiderBoss, bossSpawnPoint.position, Quaternion.identity);
+                GameObject spiderQueen = Instantiate(spiderBoss, bossSpawnPoint.position, Quaternion.identity);
+                StartCoroutine(UIManager.instance.RunNotificationText($"Boss Spawned look for unique area!  Boss must die for you to move on", 3f));
+                Debug.Log($"Spawned the boss! {spiderQueen} at {bossSpawnPoint} for room: {room.name} for {currentRoomIndex}");
             }
         }
     }
