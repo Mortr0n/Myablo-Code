@@ -8,18 +8,22 @@ public class PlayerMovement : MonoBehaviour
 {
     //[SerializeField] GameObject testSphere; //this was for testing.  No longer needed, but useful for seeing if your raycast stuff works remember to add the sphere to the player prefab field
     NavMeshAgent agent;
+
     bool isDashing = false;
     [SerializeField] float dashDuration = 2f;
     [SerializeField] float dashSpeed = 1045f;
     float dashPauseTime = 1f;
-   
-    
+    private float rotationSpeed = 10f;
+
+
+
     Vector3 lastMovementDirection = Vector3.zero;
     Vector3 dashEnd = Vector3.zero;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
     }
 
 
@@ -28,6 +32,52 @@ public class PlayerMovement : MonoBehaviour
         if (agent.velocity.magnitude > .1f)
         {
             lastMovementDirection = agent.velocity.normalized;
+        }
+        KeyboarMovement();
+    }
+
+    void KeyboarMovement()
+    {
+        var vertical = Input.GetAxis("Vertical");
+        var horizontal = Input.GetAxis("Horizontal");
+        if (vertical != 0 || horizontal != 0)
+        {
+            if (agent.hasPath) agent.ResetPath();
+        }
+        
+        Rigidbody rigidBody = GetComponent<Rigidbody>();
+        Vector3 move = new Vector3(horizontal, 0, vertical);
+        move = transform.TransformDirection(move);
+        if (move.magnitude > 1)
+        {
+            move.Normalize();
+        }
+        
+        if (move != Vector3.zero)
+        {
+            if (horizontal < 0) {
+                transform.rotation = Quaternion.LookRotation(Vector3.left);
+                agent.Move(Vector3.left * Time.deltaTime * 5);
+            }
+            else if (horizontal > 0)
+            {
+                transform.rotation = Quaternion.LookRotation(Vector3.right);
+                agent.Move(Vector3.right * Time.deltaTime * 5);
+            }
+            if (vertical < 0)
+            {
+                transform.rotation = Quaternion.LookRotation(Vector3.back);
+                agent.Move(Vector3.back * Time.deltaTime * 5);
+            }
+            else if (vertical > 0)
+            {
+                transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                agent.Move(Vector3.forward * Time.deltaTime * 5);
+            }
+        }
+        else
+        {
+            //agent.velocity = Vector3.zero; 
         }
     }
 
