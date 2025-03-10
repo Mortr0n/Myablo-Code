@@ -3,6 +3,8 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerController : Clickable
 {
@@ -10,6 +12,11 @@ public class PlayerController : Clickable
 
     [SerializeField] EquippableAbility ability1;
     [SerializeField] EquippableAbility ability2;
+
+    
+    bool canCastAbility = true;
+    [SerializeField] float ability2Cooldown = 1f;
+    SkillCooldownUI skillCooldownUI;
 
     [SerializeField] GameObject magicShield;
         
@@ -36,6 +43,7 @@ public class PlayerController : Clickable
     {
         if (instance == null) { instance = this; }
         else Destroy(gameObject);
+        //skillCooldownUI = FindFirstObjectByType<SkillCooldownUI>();
     }
 
     void Start()
@@ -111,13 +119,24 @@ public class PlayerController : Clickable
     #region Ability Stuff
     void UseAbility1()
     {
-        ability1.RunAbilityClicked(this);
+        ability1.RunAbilityClicked(this, 0);
     }
 
     void UseAbility2()
     {
-        ability2.RunAbilityClicked(this);
+        Debug.Log("Can cast ability? " + canCastAbility);
+        if (canCastAbility) StartCoroutine(Ability2WaitTimer());
     }
+
+    public IEnumerator Ability2WaitTimer()
+    {
+        ability2.RunAbilityClicked(this, ability2Cooldown);
+        canCastAbility = false;
+        Debug.Log("Starting Ability 2 Wait Timer " + canCastAbility);
+        yield return new WaitForSeconds(ability2Cooldown);
+        canCastAbility = true;
+    }
+
     public void SetAbility2(EquippableAbility newAbility)
     {
         ability2 = newAbility;

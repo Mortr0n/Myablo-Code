@@ -48,7 +48,7 @@ public class AttackingState : EnemyStateBase
         {
             return;
         }
-        if (!ai.TargetIsInAttackRange(targetToAttack))
+        if (targetToAttack != null && !ai.TargetIsInAttackRange(targetToAttack))
         {
             ai.ChangeState(new PursuingState(targetToAttack));
         }
@@ -56,7 +56,7 @@ public class AttackingState : EnemyStateBase
     }
 
 
-    void RunAttacking(EnemyAI ai)
+    protected virtual void RunAttacking(EnemyAI ai)
     {
 
         // Swing every attack 
@@ -73,13 +73,13 @@ public class AttackingState : EnemyStateBase
         }
 
         // if target out of range pursue
-        if (!ai.TargetIsInAttackRange(targetToAttack))
+        if (targetToAttack != null && !ai.TargetIsInAttackRange(targetToAttack))
         {
             ai.TriggerPursuing(ai.Target);
         }
     }
 
-    void SpawnAttackPrefab(EnemyAI ai)
+    protected virtual void SpawnAttackPrefab(EnemyAI ai)
     {
         //Debug.Log("Spawning attack Prefab");
         //Debug.Log("Attack Prefab spawned");

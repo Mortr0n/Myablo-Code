@@ -44,13 +44,6 @@ public class PlayerCombat : CombatReceiver
         EventsManager.instance.onStatPointSpent.RemoveListener(StatsChangedAdjustment);
     }
 
-    //public override void TakeDamage(float amount)
-    //{
-    //    //Debug.Log("Take Damage");
-    //    base.TakeDamage(amount);
-    //    EventsManager.instance.onHealthChanged.Invoke(currentHP / maxHP);
-    //}
-
     public override void TakeDamage(float amount)
     {
         if (isInvincible) return;

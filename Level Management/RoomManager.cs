@@ -41,7 +41,7 @@ public class RoomManager : MonoBehaviour
             spawnerCount++;
 
             // setting number of random spawners to pull from and then making sure I don't somehow exceed the number of spawners
-            int topSpawnIndex = currentRoomIndex + additionalBaseSpawnIndex;
+            int topSpawnIndex = currentRoomIndex + additionalBaseSpawnIndex;   // this starts at 3 currently with the first room doing 1 plus the additional base of 2
             if (topSpawnIndex >= spawnerPrefab.Count)
             {
                 topSpawnIndex = spawnerPrefab.Count - 1;
@@ -51,7 +51,7 @@ public class RoomManager : MonoBehaviour
 
 
             GameObject spawnerObj = Instantiate(spawnerPrefab[spawnIdx], spawnPointTransform.position, Quaternion.identity);
-            //Debug.Log($"Instantiated {spawnerObj.name}");
+
             // Optionally, if the spawner needs to know about its key status, handle it here
             SpawnPoint spawnPoint = spawnPointTransform.GetComponent<SpawnPoint>();
             spawnerObj.name = $"Spawner_{spawnerCount}";
@@ -61,6 +61,7 @@ public class RoomManager : MonoBehaviour
 
                 spawner.HasKey = spawnPoint.HasKey; // Pass the key status to the spawner
                 spawner.ParentRoom = newRoom;
+                spawner.EnemyLevel = currentRoomIndex;
             }
         }
     }
@@ -84,17 +85,24 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    // could move this up, but then you have to look for the message that is used in the next function so I'm leaving here for now
+    private string[] bossMessages = new string[]
+    {
+        "Boss Spawned look for unique area!",
+        "Need key and defeat Boss for next door to unlock!"
+    };
+
     private void MarkKeyAsObtained(Room room)
     {
-        Debug.Log($"{room.name}'s key acquired.  Crazy things now ::: room: {room} idx: {currentRoomIndex} idx + 1: {currentRoomIndex + 1} ");
         if(!roomsWithKeysObtained.Contains(room))
         {
             roomsWithKeysObtained.Add(room);
             //FIXME: I am testing the other message and must deleted it and run the one below instead.  Don't forget!!!
-            StartCoroutine(UIManager.instance.RunNotificationText($"Acquired Key for next area!", 3f));
+            //StartCoroutine(UIManager.instance.RunNotificationText($"Acquired Key for next area!", 3f));
 
             //FIXME: Delete this line and uncomment the one above for final product
             //NOTE: Maybe do back to back notification so that 2 messages can alert the player about the boss being around and then you not being able to move on until the boss is dead
+            //StartCoroutine(UIManager.instance.RunMultiNotificationText(bossMessages, 0, 1f));
             //StartCoroutine(UIManager.instance.RunNotificationText($"Boss Spawned look for unique area!  Boss must die for you to move on", 5f));
             if ((currentRoomIndex) % 3 == 0) 
             {
@@ -102,7 +110,8 @@ public class RoomManager : MonoBehaviour
                 Transform bossSpawnPoint = room.GetBossSpawnPoint();
                 // Spawn the boss
                 GameObject spiderQueen = Instantiate(spiderBoss, bossSpawnPoint.position, Quaternion.identity);
-                StartCoroutine(UIManager.instance.RunNotificationText($"Boss Spawned look for unique area!  Boss must die for you to move on", 3f));
+                // Multiple messages to make the notification show both what happened and then what is needed to happen
+                StartCoroutine(UIManager.instance.RunMultiNotificationText(bossMessages, 0, 3f));
                 Debug.Log($"Spawned the boss! {spiderQueen} at {bossSpawnPoint} for room: {room.name} for {currentRoomIndex}");
             }
         }

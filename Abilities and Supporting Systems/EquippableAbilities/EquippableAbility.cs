@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class EquippableAbility : ClassSkill
 {
@@ -8,8 +10,10 @@ public class EquippableAbility : ClassSkill
     protected CombatReceiver targetedReceiver;
     protected PlayerController myPlayer;
 
-    public virtual void RunAbilityClicked(PlayerController player)
+
+    public virtual void RunAbilityClicked(PlayerController player, float abilityCooldown)
     {
+        SkillCooldownUI skillCooldownUI = FindFirstObjectByType<SkillCooldownUI>();
         if (MouseIsOverUI()) return;
 
         myPlayer = player;
@@ -21,6 +25,7 @@ public class EquippableAbility : ClassSkill
 
         if (Physics.Raycast(ray, out hit))
         {
+            if (abilityCooldown > 0) StartCoroutine(skillCooldownUI.SkillCooldown(abilityCooldown));
             SuccessfulRaycastFunctionality(ref hit);
         }
     }
@@ -37,16 +42,13 @@ public class EquippableAbility : ClassSkill
 
         if (hit.collider.gameObject.GetComponent<Clickable>())
         {
-            //Debug.Log("Clickable clicked");
             targetedReceiver = hit.collider.GetComponent<CombatReceiver>();
-            //targetedReceiver = hit.collider.gameObject.GetComponent<CombatReceiver>(); //TODO: Original way
         }
     }
 
     protected virtual void SpawnEquippedAttack(Vector3 location)
     {
         GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
-        //Debug.Log($"!!!! {this.name} newAttack: {newAttack} prefab: {spawnablePrefab.name}");
         newAttack.GetComponent<CombatActor>().SetFactionID(myPlayer.GetFactionID());
 
         float critMod = 1;
@@ -68,27 +70,11 @@ public class EquippableAbility : ClassSkill
     protected virtual void Update()
     {
         if (targetedReceiver != null)   RunTargetAttack();
-
-        //if (Input.GetKeyDown(KeyCode.Space)) 
-        //{
-        //    Dash();
-        //}
     }
-    //protected void Dash()
-    //{
-    //    myPlayer = player;
-    //    Debug.Log($"myPlayer: {myPlayer}");
-    //    Vector3 dashDirection = myPlayer.Movement().GetLastMovementDirection();
 
-    //    // Prevent dashing in place
-    //    if (dashDirection == Vector3.zero) return;
-
-    //    myPlayer.Movement().PerformDash(dashDirection);
-    //}
 
     protected virtual void RunTargetAttack()
     {
-        //Debug.Log("Run Target Attack");
         if (Vector3.Distance(myPlayer.transform.position, targetedReceiver.transform.position) <= attackRange)
         {
             myPlayer.Movement().MoveToLocation(myPlayer.transform.position);

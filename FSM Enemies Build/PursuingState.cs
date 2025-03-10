@@ -78,6 +78,10 @@ public class PursuingState : EnemyStateBase
             //agent.SetDestination(agent.transform.position);
             ai.TriggerAttacking(target);
         }
+        else if (distanceToTarget > ai.MaxPursuitDistance)
+        {
+            ai.TriggerWandering();
+        }
     }
 
     public override void Exit(EnemyAI ai)

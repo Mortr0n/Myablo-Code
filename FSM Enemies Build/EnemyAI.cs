@@ -19,7 +19,9 @@ public class EnemyAI : BasicAI
     [SerializeField] protected float attackCooldown = 2.5f;
     protected float attackCooldownTimer = 0.0f;
     [SerializeField] protected GameObject attackPrefab;
+    [SerializeField] protected int enemyLevel = 1;
     [SerializeField] protected float experienceValue = 45;
+    
 
     //NOTE: this is for debugging animations and is not to be used for anything other than seeing them in the inspector!!!
     [SerializeField] public float speed;
@@ -27,7 +29,7 @@ public class EnemyAI : BasicAI
     //{
     //    get { return agent; }
     //}
-
+    public int EnemyLevel { get { return enemyLevel; } set { enemyLevel = value; } }
 
     public GameObject Target { get { return target; } }
 
@@ -45,6 +47,13 @@ public class EnemyAI : BasicAI
     public int AttackCount { get { return attackCount; } }
     public GameObject AttackPrefab { get { return attackPrefab; }  }
     public float ExperienceValue { get { return experienceValue; } }
+
+    public void InitializeEnemy()
+    {
+        experienceValue = 45 * enemyLevel;
+        damage = damage * enemyLevel;
+        attackCooldown = attackCooldown * (1 - (.02f * enemyLevel * 10f ));
+    }
 
     protected virtual void Start()
     {
@@ -119,9 +128,8 @@ public class EnemyAI : BasicAI
         {
             return;
         }
-            this.target = targetToPursue;
-            ChangeState(new PursuingState(targetToPursue));
-        
+        this.target = targetToPursue;
+        ChangeState(new PursuingState(targetToPursue));
     }
 
     

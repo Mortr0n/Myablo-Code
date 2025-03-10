@@ -10,10 +10,10 @@ public class PlayerCharacterSheet : MonoBehaviour
     float vitality = 15;
     float energy = 15;
 
-    float currentHitpoints = 35;
-    float maxHitpoints = 35;
-    float currentMana = 35;
-    float maxMana = 35;
+    //float currentHitpoints = 35;
+    //float maxHitpoints = 35;
+    //float currentMana = 35;
+    //float maxMana = 35;
 
     int statPointsToSpend = 0;
     int skillPointsToSpend = 0;
@@ -59,7 +59,15 @@ public class PlayerCharacterSheet : MonoBehaviour
     }
     float GetExperienceToNextLevel()
     {
-        return (100 * level);
+        return (100f * Mathf.Pow(1.12f, level));
+        /* at level 1 100 * 1.12 = 112
+         * at level 10 100 * 1.12^10 = 313
+         * at level 20 100 * 1.12^20 = 877
+         * at level 30 100 * 1.12^30 = 2451
+         * at level 40 100 * 1.12^40 = 6853
+         * at level 50 100 * 1.12^50 = 19179
+         * at level 100 100 * 1.12^100 = 1.3e+08  <== Big number! 
+         */
     }
     void LevelUp()
     {
@@ -82,12 +90,12 @@ public class PlayerCharacterSheet : MonoBehaviour
     #region Hitpoints
     public float GetMaxHP()
     {
-        return (5 + (2 * vitality));
+        return (5 + (5 * vitality));
     }
 
     public float GetMaxMana()
     {
-        return (5 + (2 * energy));
+        return (5 + (4 * energy));
     }
     #endregion
 

@@ -19,6 +19,12 @@ public class CombatActor : MonoBehaviour
     protected virtual void HitReceiver(CombatReceiver target)
     {
         Debug.Log($"Damaging {target}");
+        EnemyAI enemyAI = target.GetComponent<EnemyAI>();
+        // TODO:  THIS I think is how it's done!
+        if (enemyAI != null)
+        {
+            enemyAI.TriggerPursuing(this.gameObject);
+        }
         target.TakeDamage(damage);
     }
 

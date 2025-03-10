@@ -6,6 +6,7 @@ public class EnemySpawner : CombatReceiver
 {
 
     [SerializeField] private GameObject EnemyToSpawn;
+    
     protected List<GameObject> spawnedEnemies = new List<GameObject>();
     protected float spawnRateTime = 1f;
     protected float spawnRange = 5f;
@@ -17,6 +18,9 @@ public class EnemySpawner : CombatReceiver
 
     [SerializeField] protected bool hasKey = false;
     public bool HasKey { get => hasKey; set { hasKey = value; Debug.Log($"Spawner {name} HasKey set to to {hasKey}"); } }
+
+    [SerializeField] protected int enemyLevel = 1;
+    public int EnemyLevel { get => enemyLevel; set => enemyLevel = value; } 
     //[SerializeField] protected float serializedMaxHP = 200f;
 
     //public override float MaxHP
@@ -67,7 +71,10 @@ public class EnemySpawner : CombatReceiver
 
         //Vector3 spawnPos = transform.position + offset;
 
-        GameObject spawnedEnemy = Instantiate(EnemyToSpawn, transform.position + spawnPos, Quaternion.identity); 
+        GameObject spawnedEnemy = Instantiate(EnemyToSpawn, transform.position + spawnPos, Quaternion.identity);
+        EnemyAI spawnedEnemyAI = spawnedEnemy.GetComponent<EnemyAI>();
+        spawnedEnemyAI.InitializeEnemy();
+
         //Debug.Log($"spawnedEnemy: {spawnedEnemy.name}");
         spawnedEnemies.Add(spawnedEnemy);
     }

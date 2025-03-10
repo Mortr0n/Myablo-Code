@@ -65,6 +65,24 @@ public class UIManager : MonoBehaviour
         HideNotificationPanel();
     }
 
+    // This is a recursive coroutine that will display each message in the array for the specified time
+    // the start should likely always be a the beginning of the array so 0, but who am I to tell you how to live your life
+    // the args often should look like and array of messages to be called in order then the 0 index and then how long you want each message to display
+    public System.Collections.IEnumerator RunMultiNotificationText(string[] message, int currIndex, float timePerMessage)
+    {
+        if (currIndex >= message.Length)
+        {
+            HideNotificationPanel();
+            yield break;
+        }
+        //Debug.Log($"Running notification coroutine with message {message} and index {currIndex}");
+        SetMessage(message[currIndex]);
+        ShowNotificationPanel();
+        yield return new WaitForSeconds(timePerMessage);
+        HideNotificationPanel();
+        StartCoroutine(RunMultiNotificationText(message, currIndex + 1, timePerMessage));
+    }
+
     #endregion
 
     #region Character Stat Panel

@@ -18,7 +18,7 @@ public class HealSelfEquippableAbility : EquippableAbility
         }
     }
 
-    public override void RunAbilityClicked(PlayerController player)
+    public override void RunAbilityClicked(PlayerController player, float waitTime)
     {
         myPlayer = player; // this is the player that clicked the ability
         RaycastHit hit = new RaycastHit(); // just need something to pass in it's unused on this

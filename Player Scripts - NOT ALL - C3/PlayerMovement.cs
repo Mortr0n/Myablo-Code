@@ -9,8 +9,9 @@ public class PlayerMovement : MonoBehaviour
     //[SerializeField] GameObject testSphere; //this was for testing.  No longer needed, but useful for seeing if your raycast stuff works remember to add the sphere to the player prefab field
     NavMeshAgent agent;
 
+    [SerializeField] DashCooldownUI dashCooldownUI;
     bool isDashing = false;
-    [SerializeField] float dashDuration = 2f;
+    float dashDuration = .3f;
     [SerializeField] float dashSpeed = 1045f;
     float dashPauseTime = 1f;
     private float rotationSpeed = 10f;
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        dashCooldownUI = FindFirstObjectByType<DashCooldownUI>();
 
     }
 
@@ -33,51 +35,46 @@ public class PlayerMovement : MonoBehaviour
         {
             lastMovementDirection = agent.velocity.normalized;
         }
-        KeyboarMovement();
+        KeyboardMovement();
     }
 
-    void KeyboarMovement()
+    void KeyboardMovement()
     {
-        var vertical = Input.GetAxis("Vertical");
-        var horizontal = Input.GetAxis("Horizontal");
+        //var vertical = Input.GetAxis("Vertical");
+        //var horizontal = Input.GetAxis("Horizontal");
+        var vertical = Input.GetAxisRaw("Vertical");
+        var horizontal = Input.GetAxisRaw("Horizontal");
+
         if (vertical != 0 || horizontal != 0)
         {
             if (agent.hasPath) agent.ResetPath();
         }
-        
-        Rigidbody rigidBody = GetComponent<Rigidbody>();
-        Vector3 move = new Vector3(horizontal, 0, vertical);
-        move = transform.TransformDirection(move);
-        if (move.magnitude > 1)
+
+        // Get camera forward and right vectors (ignoring vertical tilt)
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0;  // Ignore up/down tilt
+        cameraForward.Normalize();
+
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraRight.y = 0; // Ignore up/down tilt
+        cameraRight.Normalize();
+
+        // Create movement direction based on camera's forward/right
+        Vector3 moveDirection = (cameraForward * vertical) + (cameraRight * horizontal);
+        //moveDirection = moveDirection.normalized * agent.speed * Time.deltaTime;
+
+        // Move only if there's input
+        if (moveDirection.sqrMagnitude > 0.001f)
         {
-            move.Normalize();
-        }
-        
-        if (move != Vector3.zero)
-        {
-            if (horizontal < 0) {
-                transform.rotation = Quaternion.LookRotation(Vector3.left);
-                agent.Move(Vector3.left * Time.deltaTime * 5);
-            }
-            else if (horizontal > 0)
-            {
-                transform.rotation = Quaternion.LookRotation(Vector3.right);
-                agent.Move(Vector3.right * Time.deltaTime * 5);
-            }
-            if (vertical < 0)
-            {
-                transform.rotation = Quaternion.LookRotation(Vector3.back);
-                agent.Move(Vector3.back * Time.deltaTime * 5);
-            }
-            else if (vertical > 0)
-            {
-                transform.rotation = Quaternion.LookRotation(Vector3.forward);
-                agent.Move(Vector3.forward * Time.deltaTime * 5);
-            }
-        }
-        else
-        {
-            //agent.velocity = Vector3.zero; 
+            moveDirection.Normalize();
+            agent.Move(moveDirection * agent.speed * Time.deltaTime );
+
+            // Rotate character to face movement direction
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(moveDirection),
+                10f * Time.deltaTime // Smooth rotation speed
+            );  
         }
     }
 
@@ -108,6 +105,8 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log($"Perform Dash {direction} isDashing? {isDashing}");
         if (!isDashing)
         {
+            //dashCooldownUI = GetComponent<DashCooldownUI>();
+            dashCooldownUI.StartDashCooldown(dashPauseTime);
             StartCoroutine(DashCoroutine(direction));
         }
         
