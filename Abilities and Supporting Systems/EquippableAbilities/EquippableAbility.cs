@@ -57,7 +57,7 @@ public class EquippableAbility : ClassSkill
         if (random < playerDex) critMod = 2;
 
         float playerStrength = PlayerCharacterSheet.instance.GetStrength();
-        float calculatedDamage = (playerStrength / 5) * critMod;
+        float calculatedDamage = (playerStrength / 2) * critMod;
 
         newAttack.GetComponent<CombatActor>().InitializeDamage(calculatedDamage);
     }

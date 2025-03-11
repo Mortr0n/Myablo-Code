@@ -14,7 +14,7 @@ public class TornadoEquippableAbility : EquippableAbility
             //TODO: Removed because I don't think I want the player to move.  Check in flame shocwave also if this works 
             //myPlayer.Movement().MoveToLocation(myPlayer.transform.position); 
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
-            AudioManager.instance.PlaySceneSwitchSwooshSFX();
+            AudioManager.instance.PlayElectricBeamSFX();
             myPlayer.Combat().SpendMana(manaCost);
         }
         else
@@ -40,7 +40,7 @@ public class TornadoEquippableAbility : EquippableAbility
         newAttack.GetComponent<TornadoAttackCA>().SetFactionID(myPlayer.GetFactionID());
         //newAttack.GetComponent<FlameShockwaveCA>().SetShootDirection(myPlayer.transform.forward);
 
-        float calculatedDamage = .1f + (.1f * skillLevel);
+        float calculatedDamage = .15f + (.15f * skillLevel);
         Debug.Log($"Calculated damage: {calculatedDamage}"); 
         newAttack.GetComponent<TornadoAttackCA>().InitializeDamage(calculatedDamage);
     }

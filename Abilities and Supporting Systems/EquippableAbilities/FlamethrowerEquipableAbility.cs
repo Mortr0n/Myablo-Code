@@ -13,7 +13,7 @@ public class FlamethrowerEquipableAbility : EquippableAbility
             SpawnEquippedAttack(hit.point);
             myPlayer.Movement().MoveToLocation(myPlayer.transform.position);
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
-            AudioManager.instance.PlaySceneSwitchSwooshSFX();
+            AudioManager.instance.PlayBigFlameSFX();
             myPlayer.Combat().SpendMana(manaCost);
         }
         else

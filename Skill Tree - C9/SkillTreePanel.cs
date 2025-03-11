@@ -56,7 +56,7 @@ public class SkillTreePanel : MonoBehaviour
             i++;
             if (i >= skillTreeButtons.Count)
             {
-                Debug.LogWarning("More skills than button slots in the active Class Skill Manager");
+                Debug.LogWarning($"More skills than button slots in the active Class Skill Manager i is {i}");
                 i--;
             }
         }

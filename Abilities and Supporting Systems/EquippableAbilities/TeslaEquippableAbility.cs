@@ -13,7 +13,7 @@ public class TeslaEquippableAbility : EquippableAbility
             SpawnEquippedAttack(hit.point);
             myPlayer.Movement().MoveToLocation(myPlayer.transform.position);
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
-            AudioManager.instance.PlaySceneSwitchSwooshSFX();
+            AudioManager.instance.PlayElectricLightningSFX();
             myPlayer.Combat().SpendMana(manaCost);
         }
         else

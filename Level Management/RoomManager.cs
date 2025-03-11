@@ -98,7 +98,7 @@ public class RoomManager : MonoBehaviour
         {
             roomsWithKeysObtained.Add(room);
             //FIXME: I am testing the other message and must deleted it and run the one below instead.  Don't forget!!!
-            //StartCoroutine(UIManager.instance.RunNotificationText($"Acquired Key for next area!", 3f));
+            StartCoroutine(UIManager.instance.RunNotificationText($"Acquired Key for next area!", 3f));
 
             //FIXME: Delete this line and uncomment the one above for final product
             //NOTE: Maybe do back to back notification so that 2 messages can alert the player about the boss being around and then you not being able to move on until the boss is dead
