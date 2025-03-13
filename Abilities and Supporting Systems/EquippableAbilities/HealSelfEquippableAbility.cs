@@ -30,6 +30,7 @@ public class HealSelfEquippableAbility : EquippableAbility
     {
         if ( CanCastHeal())
         {
+            AudioManager.instance.PlayMagicTwinkleSFX();
             SpawnEquippedAttack(myPlayer.transform.position);
         }
        

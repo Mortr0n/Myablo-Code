@@ -27,7 +27,7 @@ public class FireballEquipableAbility : EquippableAbility
             SpawnEquippedAttack(hit.point);
             myPlayer.Movement().MoveToLocation(myPlayer.transform.position);
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
-            AudioManager.instance.PlaySceneSwitchSwooshSFX();
+            AudioManager.instance.PlayDoubleBoomExplosionSFX();
             myPlayer.Combat().SpendMana(manaCost);
         }
         else

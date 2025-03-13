@@ -14,8 +14,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip bigFlame;
     [SerializeField] AudioClip doubleBoomExplosion;
     [SerializeField] AudioClip whooshExplosion;
+    [SerializeField] AudioClip windStorm;
     [SerializeField] AudioClip electrictLightning;
     [SerializeField] AudioClip electricBeam;
+    [SerializeField] AudioClip magicTwinkle;
+    [SerializeField] AudioClip magicZapSpark;
 
     [Space(10)]
     [SerializeField] AudioSource musicChannel;
@@ -175,6 +178,19 @@ public class AudioManager : MonoBehaviour
         PlaySoundEffect(electricBeam);
     }
 
+    public void PlayWindStormSFX() {
+        PlaySoundEffect(windStorm);
+    }
+
+    public void PlayMagicTwinkleSFX()
+    {
+        PlaySoundEffect(magicTwinkle);
+    }
+
+    public void PlayMagicZapSparkSFX()
+    {
+        PlaySoundEffect(magicZapSpark);
+    }
 
     // This cycles the indices of the sfx channel list and makes "currentSFXChannel" appropriate throughout the class
     // - This is called by PlayMusic() and PlaySoundEffect() before stopping the sound/music, replacing the clip, and playing the new clip

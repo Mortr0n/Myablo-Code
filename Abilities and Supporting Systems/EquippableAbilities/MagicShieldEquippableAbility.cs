@@ -29,6 +29,7 @@ public class MagicShieldEquippableAbility : EquippableAbility
     {
         if (CanCastShield())
         {
+            AudioManager.instance.PlayMagicZapSparkSFX();
             SpawnEquippedAttack(myPlayer.transform.position);
         }
     }

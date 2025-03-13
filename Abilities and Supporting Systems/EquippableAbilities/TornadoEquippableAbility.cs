@@ -14,7 +14,7 @@ public class TornadoEquippableAbility : EquippableAbility
             //TODO: Removed because I don't think I want the player to move.  Check in flame shocwave also if this works 
             //myPlayer.Movement().MoveToLocation(myPlayer.transform.position); 
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
-            AudioManager.instance.PlayElectricBeamSFX();
+            AudioManager.instance.PlayWindStormSFX();
             myPlayer.Combat().SpendMana(manaCost);
         }
         else
