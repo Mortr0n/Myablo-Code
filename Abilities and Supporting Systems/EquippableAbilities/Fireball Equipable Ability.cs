@@ -3,20 +3,6 @@ using UnityEngine;
 public class FireballEquipableAbility : EquippableAbility
 {
     [SerializeField] float manaCost = 5;
-    //public override void RunAbilityClicked(PlayerController player)
-    //{
-    //    myPlayer = player;
-    //    targetedReceiver = null;
-
-    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //    RaycastHit hit;
-    //    Physics.queriesHitTriggers = false;
-
-    //    if(Physics.Raycast(ray, out hit))
-    //    {
-    //       SuccessfulRaycastFunctionality(ref hit);
-    //    }
-    //}
 
     protected override void SuccessfulRaycastFunctionality(ref RaycastHit hit)
     {
@@ -26,8 +12,8 @@ public class FireballEquipableAbility : EquippableAbility
             //if(hit.collider.isTrigger) { return; } // don't attack trigger only colliders
             SpawnEquippedAttack(hit.point);
             myPlayer.Movement().MoveToLocation(myPlayer.transform.position);
-            //AudioManager.instance.PlaySceneSwitchSwooshSFX();
-            AudioManager.instance.PlayDoubleBoomExplosionSFX();
+
+            AudioManager.instance.PlayFireballSFX();
             myPlayer.Combat().SpendMana(manaCost);
         }
         else
@@ -52,7 +38,7 @@ public class FireballEquipableAbility : EquippableAbility
         GameObject newAttack = Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
         newAttack.GetComponent<FireballCA>().SetFactionID(myPlayer.GetFactionID());
         newAttack.GetComponent<FireballCA>().SetShootDirection(myPlayer.transform.forward);
-
+        int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
         float calculatedDamage = 1 + (2 * skillLevel);
         newAttack.GetComponent<FireballCA>().InitializeDamage(calculatedDamage);
     }

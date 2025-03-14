@@ -37,6 +37,7 @@ public class FlameShockwaveEquippableAbility : EquippableAbility
         GameObject newAttack = Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
         newAttack.GetComponent<FlameShockwaveCA>().SetFactionID(myPlayer.GetFactionID());
         //newAttack.GetComponent<FlameShockwaveCA>().SetShootDirection(myPlayer.transform.forward);
+        int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
 
         float calculatedDamage = .1f + (.1f * skillLevel);
         Debug.Log($"Calculated damage: {calculatedDamage}");

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCharacterSheet : MonoBehaviour
@@ -150,6 +151,34 @@ public class PlayerCharacterSheet : MonoBehaviour
         {
             skillPointsToSpend--;
             return true;
+        }
+    }
+
+    #endregion
+
+    #region Class Skill Stuff
+    public bool TryToSpendSkillPoint(ClassSkill skill)
+    {
+        if (skillPointsToSpend <= 0) return false;
+        
+        skillPointsToSpend--;
+        int currentLevel = GetSkillLevel(skill);
+        skillLevels[skill] = ++currentLevel;
+        Debug.Log($"Skill {skill.GetName()} leveled up to {skillLevels[skill]}");
+        return true;
+    }
+
+    private Dictionary<ClassSkill, int> skillLevels = new Dictionary<ClassSkill, int>();
+
+    public int GetSkillLevel(ClassSkill skill)
+    {
+        if (skillLevels.ContainsKey(skill))
+        {
+            return skillLevels[skill];
+        }
+        else
+        {
+            return skillLevels[skill] = 1;
         }
     }
 

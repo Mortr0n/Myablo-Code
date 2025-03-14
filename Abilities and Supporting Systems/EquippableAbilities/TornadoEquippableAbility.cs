@@ -39,6 +39,7 @@ public class TornadoEquippableAbility : EquippableAbility
 
         newAttack.GetComponent<TornadoAttackCA>().SetFactionID(myPlayer.GetFactionID());
         //newAttack.GetComponent<FlameShockwaveCA>().SetShootDirection(myPlayer.transform.forward);
+        int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
 
         float calculatedDamage = .15f + (.15f * skillLevel);
         Debug.Log($"Calculated damage: {calculatedDamage}"); 

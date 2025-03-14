@@ -9,10 +9,10 @@ public class HealSelfEquippableAbility : EquippableAbility
     bool canCastHeal = true;
     public override void LevelUp()
     {
-        if (PlayerCharacterSheet.instance.SkillPointSpendSuccessful())
+        //if (PlayerCharacterSheet.instance.SkillPointSpendSuccessful())
+        if (PlayerCharacterSheet.instance.TryToSpendSkillPoint(this))
         {
-            skillLevel++;
-
+            int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
             float healMod = 0.1f + 0.05f * skillLevel;
             PlayerController.instance.Combat().SetHealMod(healMod);
         }

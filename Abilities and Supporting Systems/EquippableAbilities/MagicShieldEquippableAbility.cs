@@ -10,9 +10,11 @@ public class MagicShieldEquippableAbility : EquippableAbility
 
     public override void LevelUp()
     {
-        if (PlayerCharacterSheet.instance.SkillPointSpendSuccessful())
+        //if (PlayerCharacterSheet.instance.SkillPointSpendSuccessful())
+        if (PlayerCharacterSheet.instance.TryToSpendSkillPoint(this))
         {
-            skillLevel++;
+
+            int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
             float shieldMod = 10f  * skillLevel;
             PlayerController.instance.Combat().SetShieldSize(shieldMod);
         }

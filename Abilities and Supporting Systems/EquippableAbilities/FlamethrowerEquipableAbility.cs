@@ -38,6 +38,8 @@ public class FlamethrowerEquipableAbility : EquippableAbility
         newAttack.GetComponent<FlamethrowerCA>().SetFactionID(myPlayer.GetFactionID());
         newAttack.GetComponent<FlamethrowerCA>().SetShootDirection(myPlayer.transform.forward);
 
+        int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
+
         float calculatedDamage = .25f + (.25f * skillLevel);
         Debug.Log($"Calculated damage: {calculatedDamage}");
         newAttack.GetComponent<FlamethrowerCA>().InitializeDamage(calculatedDamage);

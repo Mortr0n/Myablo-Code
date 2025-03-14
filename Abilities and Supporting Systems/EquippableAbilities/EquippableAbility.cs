@@ -32,8 +32,8 @@ public class EquippableAbility : ClassSkill
 
     public override void LevelUp()
     {
-        if (PlayerCharacterSheet.instance.SkillPointSpendSuccessful())
-            skillLevel++;
+        //if (PlayerCharacterSheet.instance.SkillPointSpendSuccessful())
+        if (PlayerCharacterSheet.instance.TryToSpendSkillPoint(this)) Debug.Log($"Skill Spend successful I guess");
     }
 
     protected virtual void SuccessfulRaycastFunctionality(ref RaycastHit hit)
