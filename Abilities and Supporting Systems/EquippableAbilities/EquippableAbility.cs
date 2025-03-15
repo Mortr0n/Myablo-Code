@@ -46,25 +46,52 @@ public class EquippableAbility : ClassSkill
         }
     }
 
-    protected virtual void SpawnEquippedAttack(Vector3 location)
+    protected virtual float ReturnCritChance(float dex)
     {
-        float playerStrength = PlayerCharacterSheet.instance.GetStrength();
-        float playerDex = PlayerCharacterSheet.instance.GetDexterity();
+        // utilizing Sigmoid formula for curve control on crit chance ramp up.
+        float maxCritChance = 1f;
+        float growthFactor = .04f;
+        float midPoint = 40f;
+        float critChance = maxCritChance / (1 + Mathf.Exp(-growthFactor * (dex - midPoint)));
 
-        GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
-        newAttack.GetComponent<CombatActor>().SetFactionID(myPlayer.GetFactionID());
+        return critChance * 100;
+    }
+
+    protected virtual float ReturnCritMod(float strBonus, float playerStrength)
+    {
+        float playerDex = PlayerCharacterSheet.instance.GetDexterity();
+        float dexBonus = 2 * (playerDex - 10);
 
         float critMod = 1;
+        float critChance = ReturnCritChance(playerDex);
+
+
         int random = Random.Range(0, 100);
-        
-        float dexBonus = 2 * (playerDex - 15);
+        if (random < critChance) critMod = 1 + dexBonus + strBonus;
+        Debug.Log($"Dexbonus: {dexBonus} Crit chance: {critChance} random: {random} critMod: {critMod}: Did it crit? {random < critChance}");
+        return critMod;
+    }
+
+    public float GetMeleeeDamage()
+    {
+        float playerStrength = PlayerCharacterSheet.instance.GetStrength();
+
         float strBonus = (playerStrength - 15);
+        float critMod = ReturnCritMod(strBonus, playerStrength);
 
-        if (random < playerDex) critMod = 2 + dexBonus + strBonus;
-
-        //FIXME: Need to update this to not be as big maybe start at 1.2 and go up from there
         float calculatedDamage = (playerStrength / 2) * critMod;
-        Debug.Log($"calculated damage: {calculatedDamage} crit was {critMod}");
+        return calculatedDamage;
+    }
+
+    protected virtual void SpawnEquippedAttack(Vector3 location)
+    {
+        GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
+        newAttack.GetComponent<CombatActor>().SetFactionID(myPlayer.GetFactionID());
+        
+        //FIXME: Need to update this to not be as big maybe start at 1.2 and go up from there
+        float calculatedDamage = GetMeleeeDamage();
+
+        Debug.Log($"calculated damage: {calculatedDamage}");
         newAttack.GetComponent<CombatActor>().InitializeDamage(calculatedDamage);
     }
 
