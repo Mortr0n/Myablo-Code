@@ -48,17 +48,23 @@ public class EquippableAbility : ClassSkill
 
     protected virtual void SpawnEquippedAttack(Vector3 location)
     {
+        float playerStrength = PlayerCharacterSheet.instance.GetStrength();
+        float playerDex = PlayerCharacterSheet.instance.GetDexterity();
+
         GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
         newAttack.GetComponent<CombatActor>().SetFactionID(myPlayer.GetFactionID());
 
         float critMod = 1;
         int random = Random.Range(0, 100);
-        float playerDex = PlayerCharacterSheet.instance.GetDexterity();
-        if (random < playerDex) critMod = 2;
+        
+        float dexBonus = 2 * (playerDex - 15);
+        float strBonus = (playerStrength - 15);
 
-        float playerStrength = PlayerCharacterSheet.instance.GetStrength();
+        if (random < playerDex) critMod = 2 + dexBonus + strBonus;
+
+        //FIXME: Need to update this to not be as big maybe start at 1.2 and go up from there
         float calculatedDamage = (playerStrength / 2) * critMod;
-
+        Debug.Log($"calculated damage: {calculatedDamage} crit was {critMod}");
         newAttack.GetComponent<CombatActor>().InitializeDamage(calculatedDamage);
     }
 
