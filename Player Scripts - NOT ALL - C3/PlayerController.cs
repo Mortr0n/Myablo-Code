@@ -13,19 +13,20 @@ public class PlayerController : Clickable
     [SerializeField] EquippableAbility ability1;
     [SerializeField] EquippableAbility ability2;
 
-    
-    bool canCastAbility = true;
+    bool canCastAbility1 = true;
+    bool canCastAbility2 = true;
+    [SerializeField] float ability1Cooldown = 2f;
     [SerializeField] float ability2Cooldown = 1f;
     SkillCooldownUI skillCooldownUI;
 
     [SerializeField] GameObject magicShield;
-        
+       
     
     bool alive = true;
     int factionID = 1;
     bool inDialog = false;
     Vector3 dashDirection = Vector3.zero;
-
+    float lastCameraYRotation = 0f; // Store last camera rotation
 
     public static PlayerController instance;
 
@@ -39,11 +40,15 @@ public class PlayerController : Clickable
         magicShield.SetActive(false);
     }
 
+    public bool GetCanCastAbility1()
+    {
+        return canCastAbility1;
+    }
+
     private void Awake()
     {
         if (instance == null) { instance = this; }
         else Destroy(gameObject);
-        //skillCooldownUI = FindFirstObjectByType<SkillCooldownUI>();
     }
 
     void Start()
@@ -63,39 +68,45 @@ public class PlayerController : Clickable
         EventsManager.instance.onDialogEnded.RemoveListener(EndDialogMode);
     }
 
+
     void Update()
     {
-        if (inDialog) return;
-        if (!alive) return;
+        if (inDialog || !alive) return;
 
-        // cam relative move direction
         Vector3 camForward = Camera.main.transform.forward;
         Vector3 camRight = Camera.main.transform.right;
 
-        // Flatten to ignore vertical movement
         camForward.y = 0;
         camRight.y = 0;
         camForward.Normalize();
         camRight.Normalize();
 
+        // If movement key is pressed, store dash direction & camera rotation
         if (Input.GetKeyDown(KeyCode.W))
         {
             dashDirection = camForward;
+            lastCameraYRotation = Camera.main.transform.eulerAngles.y;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             dashDirection = -camForward;
+            lastCameraYRotation = Camera.main.transform.eulerAngles.y;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
             dashDirection = camRight;
+            lastCameraYRotation = Camera.main.transform.eulerAngles.y;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             dashDirection = -camRight;
+            lastCameraYRotation = Camera.main.transform.eulerAngles.y;
         }
-        if (Input.GetMouseButtonDown(0) && ability1 != null) UseAbility1();
+
+        if (Input.GetMouseButtonDown(0) && ability1 != null && canCastAbility1) UseAbility1();
         if (Input.GetMouseButtonDown(1) && ability2 != null) UseAbility2();
+
+        // Adjust dash direction if camera has rotated
         if (Input.GetKeyDown(KeyCode.Space) && dashDirection != Vector3.zero)
         {
             Dash(dashDirection);
@@ -104,19 +115,75 @@ public class PlayerController : Clickable
 
     protected void Dash(Vector3 direction)
     {
-        //myPlayer = player;
-        //Debug.Log($"myPlayer: {this} Direction: {direction}");
-        Vector3 dashDirection = direction;
+        float currentCameraYRotation = Camera.main.transform.eulerAngles.y;
+        float rotationDifference = currentCameraYRotation - lastCameraYRotation;
 
-        // Prevent dashing in place
-        if (dashDirection == Vector3.zero) return;
+        // Apply the rotation difference to the dash direction
+        Quaternion rotationAdjustment = Quaternion.Euler(0, rotationDifference, 0);
+        Vector3 adjustedDashDirection = rotationAdjustment * direction;
 
-         this.Movement().PerformDash(dashDirection);
-        
+        Debug.Log($"Dashing! Adjusted Direction: {adjustedDashDirection}");
+
+        transform.rotation = Quaternion.LookRotation(adjustedDashDirection);
+
+        this.Movement().PerformDash(adjustedDashDirection);
     }
+
+    //void Update()
+    //{
+    //    if (inDialog) return;
+    //    if (!alive) return;
+
+    //    // cam relative move direction
+    //    Vector3 camForward = Camera.main.transform.forward;
+    //    Vector3 camRight = Camera.main.transform.right;
+
+    //    // Flatten to ignore vertical movement
+    //    camForward.y = 0;
+    //    camRight.y = 0;
+    //    camForward.Normalize();
+    //    camRight.Normalize();
+
+    //    if (Input.GetKeyDown(KeyCode.W))
+    //    {
+    //        dashDirection = camForward;
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.S))
+    //    {
+    //        dashDirection = -camForward;
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.D))
+    //    {
+    //        dashDirection = camRight;
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        dashDirection = -camRight;
+    //    }
+        //if (Input.GetMouseButtonDown(0) && ability1 != null && canCastAbility1) UseAbility1();
+        //if (Input.GetMouseButtonDown(1) && ability2 != null) UseAbility2();
+    //    if (Input.GetKeyDown(KeyCode.Space) && dashDirection != Vector3.zero)
+    //    {
+    //        Dash(dashDirection);
+    //    }
+    //}
+
+    //protected void Dash(Vector3 direction)
+    //{
+    //    //myPlayer = player;
+    //    //Debug.Log($"myPlayer: {this} Direction: {direction}");
+    //    Vector3 dashDirection = direction;
+
+    //    // Prevent dashing in place
+    //    if (dashDirection == Vector3.zero) return;
+
+    //     this.Movement().PerformDash(dashDirection);
+
+    //}
 
 
     #region Ability Stuff
+    // could not get the wait to work as an ability 1 so there's a melee wait in the equippable ability
     void UseAbility1()
     {
         ability1.RunAbilityClicked(this, 0);
@@ -124,17 +191,27 @@ public class PlayerController : Clickable
 
     void UseAbility2()
     {
-        Debug.Log("Can cast ability? " + canCastAbility);
-        if (canCastAbility) StartCoroutine(Ability2WaitTimer());
+        if (canCastAbility2) StartCoroutine(Ability2WaitTimer());
     }
+
+    // could not get the wait to work as an ability 1 so there's a melee wait in the equippable ability
+    //public IEnumerator Ability1WaitTimer()
+    //{
+    //    Debug.Log($"AbilityWaitTimer started {canCastAbility1} and {ability1Cooldown}");
+    //    ability1.RunAbilityClicked(this, ability1Cooldown);
+    //    canCastAbility1 = false;
+    //    Debug.Log("Starting Ability Wait Timer 1 " + canCastAbility1);
+    //    yield return new WaitForSeconds(ability1Cooldown);
+    //    canCastAbility1 = true;
+    //    Debug.Log($"Can cast ability end of routine {canCastAbility1}");
+    //}
 
     public IEnumerator Ability2WaitTimer()
     {
         ability2.RunAbilityClicked(this, ability2Cooldown);
-        canCastAbility = false;
-        Debug.Log("Starting Ability 2 Wait Timer " + canCastAbility);
+        canCastAbility2 = false;
         yield return new WaitForSeconds(ability2Cooldown);
-        canCastAbility = true;
+        canCastAbility2 = true;
     }
 
     public void SetAbility2(EquippableAbility newAbility)

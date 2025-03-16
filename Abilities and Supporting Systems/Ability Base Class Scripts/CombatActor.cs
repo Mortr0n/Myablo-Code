@@ -20,11 +20,12 @@ public class CombatActor : MonoBehaviour
     {
         //Debug.Log($"Damaging {target}");
         EnemyAI enemyAI = target.GetComponent<EnemyAI>();
-        // TODO:  THIS I think is how it's done!
+
         if (enemyAI != null)
         {
             enemyAI.TriggerPursuing(this.gameObject);
         }
+        Debug.Log($"Dammaging ThingName: {target.name} for damage: {damage}");
         target.TakeDamage(damage);
     }
 

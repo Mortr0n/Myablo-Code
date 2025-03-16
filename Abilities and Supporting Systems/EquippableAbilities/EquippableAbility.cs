@@ -10,6 +10,10 @@ public class EquippableAbility : ClassSkill
     protected CombatReceiver targetedReceiver;
     protected PlayerController myPlayer;
 
+    protected float waitTime = .5f;
+    protected bool canAttack = true;
+
+    public float GetAbilityWaitTime() { return waitTime; }
 
     public virtual void RunAbilityClicked(PlayerController player, float abilityCooldown)
     {
@@ -68,7 +72,7 @@ public class EquippableAbility : ClassSkill
 
         int random = Random.Range(0, 100);
         if (random < critChance) critMod = 1 + dexBonus + strBonus;
-        Debug.Log($"Dexbonus: {dexBonus} Crit chance: {critChance} random: {random} critMod: {critMod}: Did it crit? {random < critChance}");
+        //Debug.Log($"Dexbonus: {dexBonus} Crit chance: {critChance} random: {random} critMod: {critMod}: Did it crit? {random < critChance}");
         return critMod;
     }
 
@@ -106,6 +110,16 @@ public class EquippableAbility : ClassSkill
     }
 
 
+    // not sure why but the ability1 wait did not work so I am completely unsure how it just skips that for the melee, but we can put a wait in here instead
+    public IEnumerator MeleeWaitTimer()
+    {
+        canAttack = false;
+        SpawnEquippedAttack(myPlayer.transform.position + myPlayer.transform.forward);
+        yield return new WaitForSeconds(waitTime);
+        myPlayer.GetAnimator().TriggerAttack();
+        canAttack = true;
+    }
+
     protected virtual void RunTargetAttack()
     {
         if (Vector3.Distance(myPlayer.transform.position, targetedReceiver.transform.position) <= attackRange)
@@ -115,8 +129,11 @@ public class EquippableAbility : ClassSkill
             Vector3 lookPos = new Vector3(targetedReceiver.transform.position.x, myPlayer.transform.position.y, targetedReceiver.transform.position.z);
             myPlayer.transform.LookAt(lookPos);
 
-            SpawnEquippedAttack(myPlayer.transform.position + myPlayer.transform.forward);
-            myPlayer.GetAnimator().TriggerAttack();
+
+            if (canAttack)
+            {
+                StartCoroutine(MeleeWaitTimer());
+            }
 
 
             targetedReceiver = null;

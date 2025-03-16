@@ -53,6 +53,9 @@ public class EnemyAI : BasicAI
         experienceValue = 45 * enemyLevel;
         damage = damage * enemyLevel;
         attackCooldown = attackCooldown * (1 - (.02f * enemyLevel * 10f ));
+
+        // don't want to spam attacks too much!
+        if (attackCooldown < .3f) attackCooldown = .3f;
     }
 
     protected virtual void Start()
@@ -128,6 +131,7 @@ public class EnemyAI : BasicAI
         {
             return;
         }
+        if (agent != null) agent.isStopped = false;
         this.target = targetToPursue;
         ChangeState(new PursuingState(targetToPursue));
     }

@@ -17,7 +17,7 @@ public class EnemySpawner : CombatReceiver
     public Room ParentRoom { get => parentRoom;  set { parentRoom = value; } }
 
     [SerializeField] protected bool hasKey = false;
-    public bool HasKey { get => hasKey; set { hasKey = value; Debug.Log($"Spawner {name} HasKey set to to {hasKey}"); } }
+    public bool HasKey { get => hasKey; set { hasKey = value; } }
 
     [SerializeField] protected int enemyLevel = 1;
     public int EnemyLevel { get => enemyLevel; set => enemyLevel = value; } 
@@ -54,7 +54,7 @@ public class EnemySpawner : CombatReceiver
         if (spawnedEnemies.Contains(enemy))
         {
             spawnedEnemies.Remove(enemy);
-            Debug.Log("Removed enemy from list via event");
+            //Debug.Log("Removed enemy from list via event");
         }
     }
 

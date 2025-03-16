@@ -13,17 +13,10 @@ public class CombatReceiver : Clickable
         currentHP = maxHP;
     }
 
-    //public virtual float MaxHP
-    //{
-    //    set { maxHP = value; }
-    //    get;
-    //}
-
     public float GetMaxHealth() { return maxHP; }
 
     public virtual void Die() 
     {
-        //Debug.Log($"Died alive var is {alive}");
         if (!alive) { return; }
         alive = false;
     }
@@ -35,14 +28,13 @@ public class CombatReceiver : Clickable
 
     public int GetFactionID() 
     {
-        //Debug.Log("CombatReceiver get factionID");
         return factionID; 
     }
 
 
     public virtual void TakeDamage(float amount)
     {
-        Debug.Log($"Taking Damage {amount}");
+        Debug.Log($"currentHP: {currentHP} Taking Damage {amount}");
         if (!alive) { return; }
         currentHP -= amount;
         if(currentHP <= 0) Die();

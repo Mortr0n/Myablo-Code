@@ -91,12 +91,12 @@ public class PlayerCharacterSheet : MonoBehaviour
     #region Hitpoints
     public float GetMaxHP()
     {
-        return (5 + (5 * vitality));
+        return (5 + (20 * vitality));
     }
 
     public float GetMaxMana()
     {
-        return (5 + (4 * energy));
+        return (5 + (10 * energy));
     }
     #endregion
 

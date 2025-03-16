@@ -13,6 +13,7 @@ public class AttackingState : EnemyStateBase
     {
         
         this.targetToAttack = target;
+        Debug.Log($"Target: {target}");
     }
     public override void Enter(EnemyAI ai)
     {
@@ -37,7 +38,7 @@ public class AttackingState : EnemyStateBase
             agent = ai.GetComponent<NavMeshAgent>();
         }
         
-        RunAttacking(ai);
+        //RunAttacking(ai);
 
     }
     
@@ -77,6 +78,7 @@ public class AttackingState : EnemyStateBase
         {
             ai.TriggerPursuing(ai.Target);
         }
+        if (targetToAttack == null) ai.TriggerWandering();
     }
 
     protected virtual void SpawnAttackPrefab(EnemyAI ai)

@@ -33,19 +33,7 @@ public class BasicAI : MonoBehaviour
     {
         aiAlive = false;
     }
-    //public void SetAgentMoving()
-    //{
-    //    isStopped = false;
-    //}
-    //public void SetAgentStopped()
-    //{
-    //    isStopped = true;
-    //}
 
-    //public bool ReturnMoveState()
-    //{
-    //    return isStopped;
-    //}
 
     protected virtual void RunAI()
     {   

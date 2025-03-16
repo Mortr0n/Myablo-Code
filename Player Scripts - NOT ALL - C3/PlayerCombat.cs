@@ -47,7 +47,7 @@ public class PlayerCombat : CombatReceiver
     public override void TakeDamage(float amount)
     {
         if (isInvincible) return;
-        Debug.Log($"Taking Damage {amount}");
+        //Debug.Log($"Taking Damage {amount}");
         if (!alive) { return; }
         //TODO: Could change shield logic to only block a percentage of damage, that can be increased with level. But I'm staying simple for now
         if (currentShield > 0)
@@ -63,6 +63,7 @@ public class PlayerCombat : CombatReceiver
                 currentShield = 0;
             }
         }
+        Debug.Log($"Player HP: {currentHP} Damage: {amount} ");
         currentHP -= amount;
         if (currentHP <= 0) Die();
         EventsManager.instance.onHealthChanged.Invoke(currentHP / maxHP);
