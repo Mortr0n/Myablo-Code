@@ -3,47 +3,60 @@ using UnityEngine;
 public class CombatActor : MonoBehaviour
 {
     protected int factionID = 0;
+    protected GameObject owner;
     protected float damage = 1;
 
-    public virtual void InitializeDamage(float amount)
+    public virtual void InitializeDamage(float amount, GameObject ownerRef)
     {
         damage = amount;
+        owner = ownerRef;
     }
 
     public void SetFactionID(int newID)
     {
-        //Debug.Log("Set Faction ID");
         factionID = newID;
     }
 
     protected virtual void HitReceiver(CombatReceiver target)
     {
-        //Debug.Log($"Damaging {target}");
+        Debug.Log($"inside hit receiver");
         EnemyAI enemyAI = target.GetComponent<EnemyAI>();
 
+        
         if (enemyAI != null)
         {
-            enemyAI.TriggerPursuing(this.gameObject);
+            Debug.Log($"Enemy AI: {enemyAI}");
+            Debug.Log($"Enemy AI Triggering Attacking on target {owner.name}");
+            enemyAI.TriggerAttacking(owner);
         }
-        Debug.Log($"Dammaging ThingName: {target.name} for damage: {damage}");
+        Debug.Log($"{enemyAI.name} or {target.name} is Damaging ThingName: {owner.name} for damage: {damage}");
         target.TakeDamage(damage);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        //Debug.Log($"on trigger combat actor ");
+        
         CombatReceiver combatReceiver = other.GetComponent<CombatReceiver>();
+        Debug.Log($"{this.name} on trigger combat actor oTrigger: {other.isTrigger}");
+        if (combatReceiver == null)
+        {
+            Debug.Log($"Null Receiver {this.name}: isName ::: combat receiver {combatReceiver} is trigger? {other.isTrigger} faction: {factionID} {this.name}");
+            return;
+        }
         if (combatReceiver != null)
         {
-            Debug.Log($"{this.name}: isName ::: combat receiver {combatReceiver} is trigger? {other.isTrigger} faction: {combatReceiver.GetFactionID()} otherfaction: {factionID} {other.name}");
+            Debug.Log($"{this.name}: isName ::: combat receiver {combatReceiver} is trigger? {other.isTrigger} faction: {combatReceiver.GetFactionID()} otherfaction: {factionID} {this.name}");
         }
-        if (combatReceiver != null && !other.isTrigger)
+
+        Debug.Log($"{combatReceiver.name} is trigger? {other.isTrigger} t/f: {combatReceiver != null && !other.isTrigger} or {this.name} is Damaging ThingName: {other.name} for damage: {damage}");
+        if (!other.isTrigger)
         {
-            //Debug.Log($"Inside first if trigger? {other.isTrigger}");
+            Debug.Log($"Inside first if trigger? {other.isTrigger}");
             if (combatReceiver.GetFactionID() != factionID)
             {
+                Debug.Log($"Inside second if trigger? {combatReceiver}");
                 HitReceiver(combatReceiver);
             }
-        }
-    }
+        } 
+    } 
 }

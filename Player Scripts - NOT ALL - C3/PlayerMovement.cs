@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     float dashDuration = .3f;
     [SerializeField] float dashSpeed = 1045f;
     float dashPauseTime = 1f;
-    private float rotationSpeed = 10f;
+    //private float rotationSpeed = 10f;
 
 
 
@@ -102,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void PerformDash(Vector3 direction)
     {
-        Debug.Log($"Perform Dash {direction} isDashing? {isDashing}");
+        //Debug.Log($"Perform Dash {direction} isDashing? {isDashing}");
         if (!isDashing)
         {
             //dashCooldownUI = GetComponent<DashCooldownUI>();

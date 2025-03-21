@@ -63,7 +63,7 @@ public class PlayerCombat : CombatReceiver
                 currentShield = 0;
             }
         }
-        Debug.Log($"Player HP: {currentHP} Damage: {amount} ");
+        //Debug.Log($"Player HP: {currentHP} Damage: {amount} ");
         currentHP -= amount;
         if (currentHP <= 0) Die();
         EventsManager.instance.onHealthChanged.Invoke(currentHP / maxHP);

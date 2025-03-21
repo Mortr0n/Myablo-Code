@@ -5,8 +5,9 @@ public class FireballCA : CombatActor
     [SerializeField] float speed = 25f;
     Vector3 shootDirection = Vector3.zero;
 
+    
 
-    void Start()
+     void Start()
     {
         Destroy(gameObject, 5f);
     }

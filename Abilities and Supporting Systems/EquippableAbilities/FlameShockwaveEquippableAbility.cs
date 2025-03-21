@@ -11,36 +11,36 @@ public class FlameShockwaveEquippableAbility : EquippableAbility
         {
             //if(hit.collider.isTrigger) { return; } // don't attack trigger only colliders
             SpawnEquippedAttack(hit.point);
-            myPlayer.Movement().MoveToLocation(myPlayer.transform.position);
+            playerController.Movement().MoveToLocation(playerController.transform.position);
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
             AudioManager.instance.PlayWhooshExplosionSFX();
-            myPlayer.Combat().SpendMana(manaCost);
+            playerController.Combat().SpendMana(manaCost);
         }
         else
         {
-            myPlayer.Movement().MoveToLocation(hit.point);
+            playerController.Movement().MoveToLocation(hit.point);
         }
     }
 
     private bool CanCastFlameShockwave(ref RaycastHit hit)
     {
-        return myPlayer.Combat().GetMana() >= manaCost && (hit.collider.gameObject.GetComponent<Clickable>() || Input.GetKey(KeyCode.LeftShift));
+        return playerController.Combat().GetMana() >= manaCost && (hit.collider.gameObject.GetComponent<Clickable>() || Input.GetKey(KeyCode.LeftShift));
     }
 
     protected override void SpawnEquippedAttack(Vector3 location)
     {
         Debug.Log($"FlameShockwave: {this.name} SpawnEquippedAttack");
-        myPlayer.transform.LookAt(new Vector3(location.x, myPlayer.transform.position.y, location.z));
+        playerController.transform.LookAt(new Vector3(location.x, playerController.transform.position.y, location.z));
 
         Vector3 spawnPosition = location;
 
         GameObject newAttack = Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
-        newAttack.GetComponent<FlameShockwaveCA>().SetFactionID(myPlayer.GetFactionID());
+        newAttack.GetComponent<FlameShockwaveCA>().SetFactionID(playerController.GetFactionID());
         //newAttack.GetComponent<FlameShockwaveCA>().SetShootDirection(myPlayer.transform.forward);
         int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
 
         float calculatedDamage = .1f + (.1f * skillLevel);
-        Debug.Log($"Calculated damage: {calculatedDamage}");
-        newAttack.GetComponent<FlameShockwaveCA>().InitializeDamage(calculatedDamage);
+        //Debug.Log($"Calculated damage: {calculatedDamage}");
+        newAttack.GetComponent<FlameShockwaveCA>().InitializeDamage(calculatedDamage, playerController.gameObject);
     }
 }

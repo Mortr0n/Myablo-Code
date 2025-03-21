@@ -11,18 +11,21 @@ public class AttackingState : EnemyStateBase
     //
     public AttackingState(GameObject target)
     {
-        
         this.targetToAttack = target;
-        Debug.Log($"Target: {target}");
     }
+
     public override void Enter(EnemyAI ai)
     {
         if (!ai.IsAlive())
         {
             return;
         } 
-        base.Enter(ai);
-        // start animation?  maybe animation would be in update?
+        base.Enter(ai); 
+
+        if (agent == null)
+        {
+            agent = ai.GetComponent<NavMeshAgent>();
+        }
 
         // Keeps the enemies from walking through the player and pushing him around
         if (agent != null)
@@ -32,25 +35,18 @@ public class AttackingState : EnemyStateBase
                 agent.isStopped = true;
             }
         }
-
-        if (agent == null)
-        {
-            agent = ai.GetComponent<NavMeshAgent>();
-        }
-        
-        //RunAttacking(ai);
-
     }
     
     public override void Update(EnemyAI ai)
     {
-        //Debug.Log($"alive? {ai.IsAlive()}");
         if (!ai.IsAlive())
         {
             return;
         }
+        //Debug.Log($"targetToAttack: {targetToAttack}");
         if (targetToAttack != null && !ai.TargetIsInAttackRange(targetToAttack))
         {
+            //Debug.Log("Target out of range or null");
             ai.ChangeState(new PursuingState(targetToAttack));
         }
         RunAttacking(ai);
@@ -59,13 +55,12 @@ public class AttackingState : EnemyStateBase
 
     protected virtual void RunAttacking(EnemyAI ai)
     {
-
         // Swing every attack 
         ai.AttackCooldownTimer += Time.deltaTime;
 
         if (ai.AttackCooldownTimer >= ai.AttackCooldown || ai.AttackCount == 0)
         {
-            ai.AttackCountInc();
+            ai.AttackCountInc(); //TODO: If I don't end up using the attack count, remove it
 
             ai.GetComponent<EnemyAnimator>().TriggerAttack();
 
@@ -76,22 +71,21 @@ public class AttackingState : EnemyStateBase
         // if target out of range pursue
         if (targetToAttack != null && !ai.TargetIsInAttackRange(targetToAttack))
         {
+            //Debug.Log($"Target out of range or null");
             ai.TriggerPursuing(ai.Target);
-        }
+        } 
+        //Debug.Log($"targetToAttack: {targetToAttack}");
         if (targetToAttack == null) ai.TriggerWandering();
     }
 
     protected virtual void SpawnAttackPrefab(EnemyAI ai)
     {
-        //Debug.Log("Spawning attack Prefab");
-        //Debug.Log("Attack Prefab spawned");
         Vector3 attackDirection = (ai.Target.transform.position - ai.Agent.transform.position);
         Vector3 spawnPosition = (attackDirection.normalized * ai.AttackRange) + ai.Agent.transform.position;
 
         GameObject newAttack = Object.Instantiate(ai.AttackPrefab, spawnPosition, Quaternion.identity);
         CombatActor ca = newAttack.GetComponent<CombatActor>();
         ca.SetFactionID(ai.FactionID);
-        ca.InitializeDamage(ai.Damage);
-
+        ca.InitializeDamage(ai.Damage, ai.gameObject);
     }
 }

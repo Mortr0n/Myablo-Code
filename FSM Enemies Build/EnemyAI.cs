@@ -65,6 +65,7 @@ public class EnemyAI : BasicAI
         ChangeState(new WanderingState(maxWanderDistance, startPosition));
     }
 
+    //TODO: If I don't end up using the attack count, remove it
     public virtual  void AttackCountInc()
     {
         attackCount++;
@@ -122,7 +123,6 @@ public class EnemyAI : BasicAI
         }
 
         ChangeState(new WanderingState(maxWanderDistance, startPosition));
-
     }
 
     public virtual void TriggerPursuing(GameObject targetToPursue)

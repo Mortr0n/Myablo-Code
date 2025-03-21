@@ -20,7 +20,7 @@ public class HealSelfEquippableAbility : EquippableAbility
 
     public override void RunAbilityClicked(PlayerController player, float waitTime)
     {
-        myPlayer = player; // this is the player that clicked the ability
+        playerController = player; // this is the player that clicked the ability
         RaycastHit hit = new RaycastHit(); // just need something to pass in it's unused on this
         SuccessfulRaycastFunctionality(ref hit);
         
@@ -31,7 +31,7 @@ public class HealSelfEquippableAbility : EquippableAbility
         if ( CanCastHeal())
         {
             AudioManager.instance.PlayMagicTwinkleSFX();
-            SpawnEquippedAttack(myPlayer.transform.position);
+            SpawnEquippedAttack(playerController.transform.position);
         }
        
     }
@@ -40,7 +40,7 @@ public class HealSelfEquippableAbility : EquippableAbility
     {
         // Check both if player has enough mana and if heal wait timer is done
         //Debug.Log($"Can Cast Heal: {myPlayer.Combat().GetMana()} >= {manaCost} && {canCastHeal}");
-        return (myPlayer.Combat().GetMana() >= manaCost) && canCastHeal;
+        return (playerController.Combat().GetMana() >= manaCost) && canCastHeal;
     }
 
     public IEnumerator HealWaitTimer()
@@ -53,9 +53,9 @@ public class HealSelfEquippableAbility : EquippableAbility
 
     protected override void SpawnEquippedAttack(Vector3 location)
     {
-        myPlayer.Combat().SpendMana(manaCost);
+        playerController.Combat().SpendMana(manaCost);
         StartCoroutine(HealWaitTimer());
-        Debug.Log($"Healing for {myPlayer.Combat().GetHealAmount()}");
+        Debug.Log($"Healing for {playerController.Combat().GetHealAmount()}");
         if (spawnablePrefab == null)
         {
             Debug.LogError("Heal Prefab is null");
@@ -66,12 +66,9 @@ public class HealSelfEquippableAbility : EquippableAbility
             GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
         }
 
-        //newAttack.GetComponent<HealSelfCA>().SetFactionID(myPlayer.GetFactionID());
-        //newAttack.GetComponent<HealSelfCA>().SetShootDirection(myPlayer.transform.forward);
-
 
         
-        myPlayer.Combat().Heal(myPlayer.Combat().GetHealAmount());
+        playerController.Combat().Heal(playerController.Combat().GetHealAmount());
         //could also do 
         //float healAmt = myPlayer.Combat().GetHealAmount() * -1;
         //newAttack.GetComponent<HealSelfCA>().InitializeDamage(healAmt);

@@ -22,7 +22,7 @@ public class MagicShieldEquippableAbility : EquippableAbility
 
     public override void RunAbilityClicked(PlayerController player, float waitTime)
     {
-        myPlayer = player; // this is the player that clicked the ability
+        playerController = player; // this is the player that clicked the ability
         RaycastHit hit = new RaycastHit(); // just need something to pass in it's unused on this
         SuccessfulRaycastFunctionality(ref hit);
     }
@@ -32,14 +32,14 @@ public class MagicShieldEquippableAbility : EquippableAbility
         if (CanCastShield())
         {
             AudioManager.instance.PlayMagicZapSparkSFX();
-            SpawnEquippedAttack(myPlayer.transform.position);
+            SpawnEquippedAttack(playerController.transform.position);
         }
     }
 
     public bool CanCastShield()
     {
         // Check both if player has enough mana and if shield wait timer is done
-        return (myPlayer.Combat().GetMana() >= manaCost) && canCastShield;
+        return (playerController.Combat().GetMana() >= manaCost) && canCastShield;
     }
 
     public IEnumerator ShieldWaitTimer()
@@ -52,20 +52,16 @@ public class MagicShieldEquippableAbility : EquippableAbility
 
     protected override void SpawnEquippedAttack(Vector3 location)
     {
-        myPlayer.Combat().SpendMana(manaCost);
+        playerController.Combat().SpendMana(manaCost);
         
-        Debug.Log($"Shielding for {myPlayer.Combat().GetCurrentShield()}");
         if (spawnablePrefab == null)
         {
             Debug.LogError("Shield Prefab is null");
         }
         else if (canCastShield)
         {
-            //GameObject newShield = Instantiate(spawnablePrefab, myPlayer.transform.position, Quaternion.identity);
             PlayerController.instance.SetShieldActive();
-            //newShield.GetComponent<MagicShieldAbility>().SetFactionID(myPlayer.GetFactionID());
             PlayerController.instance.Combat().SetCurrentShield(PlayerController.instance.Combat().GetShieldSize());
-            Debug.Log($"Shielding for {myPlayer.Combat().GetCurrentShield()} {PlayerController.instance.Combat().GetShieldSize()}");
         }
         StartCoroutine(ShieldWaitTimer());
     }

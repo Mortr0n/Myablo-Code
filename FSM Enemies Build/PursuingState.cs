@@ -19,22 +19,19 @@ public class PursuingState : EnemyStateBase
         base.Enter(ai);
 
         // Cache and modify NavMeshAgent
-        agent = ai.GetComponent<NavMeshAgent>();
-
-        if (agent != null)
-        {
-            originalSpeed = agent.speed;
-            agent.speed *= runSpeedMultiplier;
-        }
-        
         // Turns enemy movement on as it gets disabled in other states to avoid pushing the player around
+        agent = ai.GetComponent<NavMeshAgent>();
         if (agent != null)
         {
             if (agent.isStopped)
             {
                 agent.isStopped = false;
             }
+            originalSpeed = agent.speed;
+            agent.speed *= runSpeedMultiplier;
         }
+        
+       
         // Set running animation
         BasicAnimator animator = ai.GetComponent<BasicAnimator>();
         if (animator != null)
@@ -48,7 +45,6 @@ public class PursuingState : EnemyStateBase
     {
         if (target == null)
         {
-            //Debug.LogWarning($"Target is null, returning to wandering state t: {target} ");
             ai.TriggerWandering();
             return;
         }
@@ -59,11 +55,9 @@ public class PursuingState : EnemyStateBase
         }
 
         float distanceToTarget = Vector3.Distance(ai.transform.position, target.transform.position);
-        //Debug.Log($"Dist to targ: {distanceToTarget} and {distanceToTarget < ai.AttackRange} and range {ai.AttackRange}");
         if (agent == null)
         {
             agent = ai.GetComponent<NavMeshAgent>();
-            //Debug.Log($"agent {agent} isStopped {agent.isStopped}");
         }
 
         if (distanceToTarget <= ai.AttackRange)
@@ -75,7 +69,6 @@ public class PursuingState : EnemyStateBase
                     agent.isStopped = true;
                 }
             }
-            //agent.SetDestination(agent.transform.position);
             ai.TriggerAttacking(target);
         }
         else if (distanceToTarget > ai.MaxPursuitDistance)

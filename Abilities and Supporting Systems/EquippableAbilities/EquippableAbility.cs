@@ -7,20 +7,21 @@ public class EquippableAbility : ClassSkill
     [SerializeField] protected GameObject spawnablePrefab;
     [SerializeField] protected float attackRange = 1.5f;
 
+
     protected CombatReceiver targetedReceiver;
-    protected PlayerController myPlayer;
+    protected PlayerController playerController;
 
     protected float waitTime = .5f;
     protected bool canAttack = true;
 
     public float GetAbilityWaitTime() { return waitTime; }
-
+      
     public virtual void RunAbilityClicked(PlayerController player, float abilityCooldown)
-    {
+    { 
         SkillCooldownUI skillCooldownUI = FindFirstObjectByType<SkillCooldownUI>();
         if (MouseIsOverUI()) return;
 
-        myPlayer = player;
+        playerController = player;
         targetedReceiver = null;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -42,7 +43,7 @@ public class EquippableAbility : ClassSkill
 
     protected virtual void SuccessfulRaycastFunctionality(ref RaycastHit hit)
     {
-        myPlayer.Movement().MoveToLocation(hit.point);
+        playerController.Movement().MoveToLocation(hit.point);
 
         if (hit.collider.gameObject.GetComponent<Clickable>())
         {
@@ -90,13 +91,13 @@ public class EquippableAbility : ClassSkill
     protected virtual void SpawnEquippedAttack(Vector3 location)
     {
         GameObject newAttack = Instantiate(spawnablePrefab, location, Quaternion.identity);
-        newAttack.GetComponent<CombatActor>().SetFactionID(myPlayer.GetFactionID());
+        newAttack.GetComponent<CombatActor>().SetFactionID(playerController.GetFactionID());
         
         //FIXME: Need to update this to not be as big maybe start at 1.2 and go up from there
         float calculatedDamage = GetMeleeeDamage();
 
-        Debug.Log($"calculated damage: {calculatedDamage}");
-        newAttack.GetComponent<CombatActor>().InitializeDamage(calculatedDamage);
+        //Debug.Log($"calculated damage: {calculatedDamage}");
+        newAttack.GetComponent<CombatActor>().InitializeDamage(calculatedDamage, playerController.gameObject);
     }
 
     public virtual void CancelAbility()
@@ -114,20 +115,20 @@ public class EquippableAbility : ClassSkill
     public IEnumerator MeleeWaitTimer()
     {
         canAttack = false;
-        SpawnEquippedAttack(myPlayer.transform.position + myPlayer.transform.forward);
+        SpawnEquippedAttack(playerController.transform.position + playerController.transform.forward);
         yield return new WaitForSeconds(waitTime);
-        myPlayer.GetAnimator().TriggerAttack();
+        playerController.GetAnimator().TriggerAttack();
         canAttack = true;
     }
 
     protected virtual void RunTargetAttack()
     {
-        if (Vector3.Distance(myPlayer.transform.position, targetedReceiver.transform.position) <= attackRange)
+        if (Vector3.Distance(playerController.transform.position, targetedReceiver.transform.position) <= attackRange)
         {
-            myPlayer.Movement().MoveToLocation(myPlayer.transform.position);
+            playerController.Movement().MoveToLocation(playerController.transform.position);
 
-            Vector3 lookPos = new Vector3(targetedReceiver.transform.position.x, myPlayer.transform.position.y, targetedReceiver.transform.position.z);
-            myPlayer.transform.LookAt(lookPos);
+            Vector3 lookPos = new Vector3(targetedReceiver.transform.position.x, playerController.transform.position.y, targetedReceiver.transform.position.z);
+            playerController.transform.LookAt(lookPos);
 
 
             if (canAttack)
@@ -140,7 +141,7 @@ public class EquippableAbility : ClassSkill
         }
         else
         {
-            myPlayer.Movement().MoveToLocation(targetedReceiver.transform.position);
+            playerController.Movement().MoveToLocation(targetedReceiver.transform.position);
         }
     }
 

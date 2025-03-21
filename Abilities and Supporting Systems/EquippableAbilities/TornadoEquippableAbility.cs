@@ -15,34 +15,34 @@ public class TornadoEquippableAbility : EquippableAbility
             //myPlayer.Movement().MoveToLocation(myPlayer.transform.position); 
             //AudioManager.instance.PlaySceneSwitchSwooshSFX();
             AudioManager.instance.PlayWindStormSFX();
-            myPlayer.Combat().SpendMana(manaCost);
+            playerController.Combat().SpendMana(manaCost);
         }
         else
         {
-            myPlayer.Movement().MoveToLocation(hit.point);
+            playerController.Movement().MoveToLocation(hit.point);
         }
     }
 
     private bool CanCastTornado(ref RaycastHit hit)
     {
-        return myPlayer.Combat().GetMana() >= manaCost && (hit.collider.gameObject.GetComponent<Clickable>() || Input.GetKey(KeyCode.LeftShift));
+        return playerController.Combat().GetMana() >= manaCost && (hit.collider.gameObject.GetComponent<Clickable>() || Input.GetKey(KeyCode.LeftShift));
     }
 
     protected override void SpawnEquippedAttack(Vector3 location)
     {
 
-        myPlayer.transform.LookAt(new Vector3(location.x, myPlayer.transform.position.y, location.z));
+        playerController.transform.LookAt(new Vector3(location.x, playerController.transform.position.y, location.z));
 
         Vector3 spawnPosition = location;
 
         GameObject newAttack = Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
 
-        newAttack.GetComponent<TornadoAttackCA>().SetFactionID(myPlayer.GetFactionID());
+        newAttack.GetComponent<TornadoAttackCA>().SetFactionID(playerController.GetFactionID());
         //newAttack.GetComponent<FlameShockwaveCA>().SetShootDirection(myPlayer.transform.forward);
         int skillLevel = PlayerCharacterSheet.instance.GetSkillLevel(this);
 
         float calculatedDamage = .15f + (.15f * skillLevel);
-        Debug.Log($"Calculated damage: {calculatedDamage}"); 
-        newAttack.GetComponent<TornadoAttackCA>().InitializeDamage(calculatedDamage);
+        //Debug.Log($"Calculated damage: {calculatedDamage}"); 
+        newAttack.GetComponent<TornadoAttackCA>().InitializeDamage(calculatedDamage, playerController.gameObject);
     }
 }

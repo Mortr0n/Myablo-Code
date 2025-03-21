@@ -13,7 +13,7 @@ public class EnteringState : EnemyStateBase
         //this.stateTarget = target;
     }
 
-    public void Enter(EnemyAI ai)
+    public override void Enter(EnemyAI ai)
     {
         agent = ai.GetComponent<UnityEngine.AI.NavMeshAgent>();
 

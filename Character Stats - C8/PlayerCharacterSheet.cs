@@ -59,7 +59,7 @@ public class PlayerCharacterSheet : MonoBehaviour
         EventsManager.instance.onExperienceUpdated.Invoke(experience / GetExperienceToNextLevel());
     }
     float GetExperienceToNextLevel()
-    {
+    {   //TODO: CMTODO Look at slowing this down a bunch
         return (100f * Mathf.Pow(1.12f, level));
         /* at level 1 100 * 1.12 = 112
          * at level 10 100 * 1.12^10 = 313

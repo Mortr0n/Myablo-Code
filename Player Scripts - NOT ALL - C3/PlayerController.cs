@@ -15,7 +15,7 @@ public class PlayerController : Clickable
 
     bool canCastAbility1 = true;
     bool canCastAbility2 = true;
-    [SerializeField] float ability1Cooldown = 2f;
+    //[SerializeField] float ability1Cooldown = 2f;
     [SerializeField] float ability2Cooldown = 1f;
     SkillCooldownUI skillCooldownUI;
 
@@ -129,59 +129,6 @@ public class PlayerController : Clickable
         this.Movement().PerformDash(adjustedDashDirection);
     }
 
-    //void Update()
-    //{
-    //    if (inDialog) return;
-    //    if (!alive) return;
-
-    //    // cam relative move direction
-    //    Vector3 camForward = Camera.main.transform.forward;
-    //    Vector3 camRight = Camera.main.transform.right;
-
-    //    // Flatten to ignore vertical movement
-    //    camForward.y = 0;
-    //    camRight.y = 0;
-    //    camForward.Normalize();
-    //    camRight.Normalize();
-
-    //    if (Input.GetKeyDown(KeyCode.W))
-    //    {
-    //        dashDirection = camForward;
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.S))
-    //    {
-    //        dashDirection = -camForward;
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.D))
-    //    {
-    //        dashDirection = camRight;
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.A))
-    //    {
-    //        dashDirection = -camRight;
-    //    }
-        //if (Input.GetMouseButtonDown(0) && ability1 != null && canCastAbility1) UseAbility1();
-        //if (Input.GetMouseButtonDown(1) && ability2 != null) UseAbility2();
-    //    if (Input.GetKeyDown(KeyCode.Space) && dashDirection != Vector3.zero)
-    //    {
-    //        Dash(dashDirection);
-    //    }
-    //}
-
-    //protected void Dash(Vector3 direction)
-    //{
-    //    //myPlayer = player;
-    //    //Debug.Log($"myPlayer: {this} Direction: {direction}");
-    //    Vector3 dashDirection = direction;
-
-    //    // Prevent dashing in place
-    //    if (dashDirection == Vector3.zero) return;
-
-    //     this.Movement().PerformDash(dashDirection);
-
-    //}
-
-
     #region Ability Stuff
     // could not get the wait to work as an ability 1 so there's a melee wait in the equippable ability
     void UseAbility1()
@@ -194,17 +141,6 @@ public class PlayerController : Clickable
         if (canCastAbility2) StartCoroutine(Ability2WaitTimer());
     }
 
-    // could not get the wait to work as an ability 1 so there's a melee wait in the equippable ability
-    //public IEnumerator Ability1WaitTimer()
-    //{
-    //    Debug.Log($"AbilityWaitTimer started {canCastAbility1} and {ability1Cooldown}");
-    //    ability1.RunAbilityClicked(this, ability1Cooldown);
-    //    canCastAbility1 = false;
-    //    Debug.Log("Starting Ability Wait Timer 1 " + canCastAbility1);
-    //    yield return new WaitForSeconds(ability1Cooldown);
-    //    canCastAbility1 = true;
-    //    Debug.Log($"Can cast ability end of routine {canCastAbility1}");
-    //}
 
     public IEnumerator Ability2WaitTimer()
     {
