@@ -10,7 +10,7 @@ public class MeleeAttackCA : CombatActor
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
-        Debug.Log("on trigger combat actor Melee CA"); 
+        //Debug.Log("on trigger combat actor Melee CA"); 
     }
 
 }

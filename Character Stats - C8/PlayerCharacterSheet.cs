@@ -60,7 +60,16 @@ public class PlayerCharacterSheet : MonoBehaviour
     }
     float GetExperienceToNextLevel()
     {   //TODO: CMTODO Look at slowing this down a bunch
-        return (100f * Mathf.Pow(1.12f, level));
+        if (level < 5)
+        {
+            return (300f * Mathf.Pow(1.12f, level));
+        }
+        else
+        {
+            // Flatten the curve after level 20
+            return (100f * Mathf.Pow(1.12f, 20))
+                   + 500f * (level);
+        }
         /* at level 1 100 * 1.12 = 112
          * at level 10 100 * 1.12^10 = 313
          * at level 20 100 * 1.12^20 = 877

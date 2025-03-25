@@ -34,7 +34,7 @@ public class CombatReceiver : Clickable
 
     public virtual void TakeDamage(float amount)
     {
-        Debug.Log($"{this.name} currentHP: {currentHP} Taking Damage {amount}");
+        Debug.Log($"[TakeDamage()] {this.name} currentHP: {currentHP} Taking Damage {amount}");
         if (!alive) { return; }
         currentHP -= amount;
         if(currentHP <= 0) Die();

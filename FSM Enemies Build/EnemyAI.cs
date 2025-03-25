@@ -48,8 +48,9 @@ public class EnemyAI : BasicAI
     public GameObject AttackPrefab { get { return attackPrefab; }  }
     public float ExperienceValue { get { return experienceValue; } }
 
-    public void InitializeEnemy()
+    public void InitializeEnemy(int level)
     {
+        enemyLevel = level;
         experienceValue = 45 * enemyLevel;
         damage = damage * enemyLevel;
         attackCooldown = attackCooldown * (1 - (.02f * enemyLevel * 10f ));

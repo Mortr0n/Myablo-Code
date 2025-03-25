@@ -73,7 +73,7 @@ public class EnemySpawner : CombatReceiver
 
         GameObject spawnedEnemy = Instantiate(EnemyToSpawn, transform.position + spawnPos, Quaternion.identity);
         EnemyAI spawnedEnemyAI = spawnedEnemy.GetComponent<EnemyAI>();
-        spawnedEnemyAI.InitializeEnemy();
+        spawnedEnemyAI.InitializeEnemy(enemyLevel);
 
         //Debug.Log($"spawnedEnemy: {spawnedEnemy.name}");
         spawnedEnemies.Add(spawnedEnemy);

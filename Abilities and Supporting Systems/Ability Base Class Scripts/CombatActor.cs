@@ -22,14 +22,14 @@ public class CombatActor : MonoBehaviour
         Debug.Log($"inside hit receiver");
         EnemyAI enemyAI = target.GetComponent<EnemyAI>();
 
-        
+
         if (enemyAI != null)
         {
             Debug.Log($"Enemy AI: {enemyAI}");
             Debug.Log($"Enemy AI Triggering Attacking on target {owner.name}");
             enemyAI.TriggerAttacking(owner);
         }
-        Debug.Log($"{enemyAI.name} or {target.name} is Damaging ThingName: {owner.name} for damage: {damage}");
+        Debug.Log($"Receiver {target.name} is taking damage from: {owner.name} for damage: {damage}");
         target.TakeDamage(damage);
     }
 
